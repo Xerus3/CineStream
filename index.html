@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasoony's VP - Premium Entertainment</title>
+    <title>CineStream - Premium Entertainment</title>
     <style>
         * {
             margin: 0;
@@ -38,7 +38,7 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* Ambient Background */
         .ambient-light {
             position: fixed;
             top: 0;
@@ -145,19 +145,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* Skeleton Loading */
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         /* Toast Notifications */
@@ -398,6 +385,9 @@
             position: relative;
             cursor: pointer;
             padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .nav-links a:hover,
@@ -422,13 +412,19 @@
             width: 100%;
         }
 
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 16px;
         }
 
-        /* Search Bar - Redesigned */
+        /* Search Bar */
         .search-container {
             position: relative;
         }
@@ -482,7 +478,7 @@
             color: var(--text-tertiary);
         }
 
-        /* Search Suggestions - Redesigned */
+        /* Search Suggestions - FIXED LAYOUT */
         .search-suggestions {
             position: absolute;
             top: calc(100% + 12px);
@@ -997,6 +993,76 @@
             gap: 10px;
         }
 
+        /* Top 10 Section */
+        .top-10-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 16px;
+        }
+
+        .top-10-card {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .top-10-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .top-10-number {
+            position: absolute;
+            bottom: -20px;
+            left: -10px;
+            font-size: 120px;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
+
+        .top-10-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            z-index: 2;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .top-10-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .top-10-card:hover .top-10-image img {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 1400px) {
+            .top-10-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-10-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .top-10-number {
+                font-size: 80px;
+                bottom: -15px;
+                left: -5px;
+            }
+        }
+
         /* Movie Grid */
         .movie-grid {
             display: grid;
@@ -1486,6 +1552,33 @@
             font-weight: 700;
         }
 
+        /* Infinite Scroll Loading */
+        .infinite-scroll-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            gap: 12px;
+        }
+
+        .infinite-scroll-loader.hidden {
+            display: none;
+        }
+
+        .loader-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--bg-tertiary);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
         /* Episode Selector */
         .episode-modal {
             display: none;
@@ -1800,38 +1893,11 @@
             transform: scale(1.1);
         }
 
-        /* Loading States */
-        .loading-skeleton {
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            overflow: hidden;
-            aspect-ratio: 2/3;
-        }
-
-        .loading-skeleton .skeleton-img {
-            width: 100%;
-            height: 70%;
-            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        .loading-skeleton .skeleton-text {
-            padding: 16px;
-        }
-
-        .loading-skeleton .skeleton-line {
-            height: 16px;
-            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-
-        .loading-skeleton .skeleton-line.short {
-            width: 60%;
-            height: 12px;
+        /* Top 50 Page Specific */
+        .top50-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
         }
 
         /* Responsive */
@@ -1895,7 +1961,7 @@
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-spinner"></div>
-        <div class="loading-text" id="loadingText">Loading Hasoony's VP ...</div>
+        <div class="loading-text" id="loadingText">Loading CineStream...</div>
     </div>
 
     <!-- Toast Container -->
@@ -1916,12 +1982,32 @@
     <!-- Navigation -->
     <div class="nav-container" id="navContainer">
         <nav>
-            <a class="logo" id="navLogo" onclick="router('home')">Hasoony's VP</a>
+            <a class="logo" id="navLogo" onclick="router('home')">CineStream</a>
             <ul class="nav-links">
-                <li><a onclick="router('home')" id="nav-home" class="active">Home</a></li>
-                <li><a onclick="router('movies')" id="nav-movies">Movies</a></li>
-                <li><a onclick="router('tv')" id="nav-tv">TV Shows</a></li>
-                <li><a onclick="router('mylist')" id="nav-mylist">My List</a></li>
+                <li>
+                    <a onclick="router('home')" id="nav-home" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a onclick="router('movies')" id="nav-movies">
+                        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+                        Movies
+                    </a>
+                </li>
+                <li>
+                    <a onclick="router('tv')" id="nav-tv">
+                        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                        TV Shows
+                    </a>
+                </li>
+                <li>
+                    <a onclick="router('mylist')" id="nav-mylist">
+                        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        My List
+                    </a>
+                </li>
             </ul>
             <div class="nav-actions">
                 <div class="search-container">
@@ -1950,7 +2036,7 @@
                     <span class="live-dot"></span>
                     Now Streaming
                 </div>
-                <h1 class="hero-title" id="heroTitle">Hasoony's VP </h1>
+                <h1 class="hero-title" id="heroTitle">CineStream</h1>
                 <div class="hero-meta" id="heroMeta">
                     <span class="rating">
                         <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -1981,46 +2067,52 @@
             <!-- Continue Watching -->
             <div id="continueWatchingContainer" style="display: none;"></div>
 
-            <!-- Recommended For You -->
-            <section class="section">
+            <!-- Watch It Again -->
+            <section class="section" id="watchItAgainSection" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title">Recommended For You</h2>
-                    <button class="see-all" onclick="refreshRecommendations()">
-                        <svg style="width: 16px; height: 16px; fill: currentColor; transform: rotate(0deg); transition: transform 0.3s;" id="refreshIcon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                        Refresh
-                    </button>
+                    <h2 class="section-title">Watch It Again</h2>
+                    <button class="see-all" onclick="clearWatchHistory()">Clear History</button>
                 </div>
-                <div class="movie-grid" id="recommendedGrid"></div>
+                <div class="movie-grid" id="watchItAgainGrid"></div>
             </section>
 
-            <!-- New Releases -->
+            <!-- Top 10 Movies -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Top 10 Movies</h2>
+                    <button class="see-all" onclick="router('movies')">View All</button>
+                </div>
+                <div class="top-10-grid" id="top10MoviesGrid"></div>
+            </section>
+
+            <!-- Top 10 TV Shows -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Top 10 TV Shows</h2>
+                    <button class="see-all" onclick="router('tv')">View All</button>
+                </div>
+                <div class="top-10-grid" id="top10TVGrid"></div>
+            </section>
+
+            <!-- New Releases - Now shows 4 items with See All -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">New Releases</h2>
-                    <button class="see-all" onclick="router('movies')">See All</button>
+                    <button class="see-all" onclick="router('top50')">See All</button>
                 </div>
                 <div class="movie-grid" id="newReleasesGrid"></div>
             </section>
 
-            <!-- Featured This Week -->
-            <section class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Featured This Week</h2>
-                    <button class="see-all" onclick="router('movies')">See All</button>
-                </div>
-                <div class="featured-grid" id="featuredGrid"></div>
-            </section>
-
-            <!-- Trending Now -->
+            <!-- Trending Now - Now shows 4 items with See All -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">Trending Now</h2>
-                    <button class="see-all" onclick="router('movies')">See All</button>
+                    <button class="see-all" onclick="router('top50')">See All</button>
                 </div>
                 <div class="movie-grid" id="trendingGrid"></div>
             </section>
 
-            <!-- Popular Series -->
+            <!-- Popular Series - Now shows 4 items with See All -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">Popular Series</h2>
@@ -2029,21 +2121,16 @@
                 <div class="movie-grid" id="popularGrid"></div>
             </section>
 
-            <!-- Top Rated -->
+            <!-- Recommended For You - Now shows 4 items with See All -->
             <section class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Top Rated</h2>
-                    <button class="see-all" onclick="router('movies')">See All</button>
+                    <h2 class="section-title">Recommended For You</h2>
+                    <button class="see-all" onclick="router('top50')">
+                        <svg style="width: 16px; height: 16px; fill: currentColor; transform: rotate(0deg); transition: transform 0.3s;" id="refreshIcon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        See All
+                    </button>
                 </div>
-                <div class="movie-grid" id="topRatedGrid"></div>
-            </section>
-
-            <!-- Because You Watched -->
-            <section class="section" id="becauseYouWatchedSection" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title" id="becauseYouWatchedTitle">Because You Watched</h2>
-                </div>
-                <div class="movie-grid" id="becauseYouWatchedGrid"></div>
+                <div class="movie-grid" id="recommendedGrid"></div>
             </section>
         </div>
     </div>
@@ -2117,19 +2204,23 @@
                     
                     <div class="sort-dropdown" id="moviesSortDropdown">
                         <button class="sort-btn" onclick="toggleMoviesSort()">
-                            <span>Sort by: Latest</span>
+                            <span id="moviesCurrentSort">Sort by: Popularity</span>
                             <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </button>
                         <div class="sort-menu">
-                            <div class="sort-option active" onclick="sortMovies('latest')">Latest</div>
+                            <div class="sort-option active" onclick="sortMovies('popular')">Popularity</div>
                             <div class="sort-option" onclick="sortMovies('rating')">Highest Rated</div>
-                            <div class="sort-option" onclick="sortMovies('popular')">Most Popular</div>
+                            <div class="sort-option" onclick="sortMovies('latest')">Latest</div>
                             <div class="sort-option" onclick="sortMovies('title_az')">A-Z</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="movie-grid" id="allMoviesGrid"></div>
+                <div class="infinite-scroll-loader hidden" id="moviesLoader">
+                    <div class="loader-spinner"></div>
+                    <span class="loader-text">Loading more movies...</span>
+                </div>
             </div>
         </div>
     </div>
@@ -2139,7 +2230,7 @@
         <div class="page-content">
             <div class="content-wrapper">
                 <div class="section-header" style="margin-bottom: 32px;">
-                    <h2 class="section-title">TV Shows</h2>
+                    <h2 class="section-title">All TV Shows</h2>
                 </div>
                 
                 <div class="filters-container">
@@ -2150,19 +2241,61 @@
                     
                     <div class="sort-dropdown" id="tvSortDropdown">
                         <button class="sort-btn" onclick="toggleTVSort()">
-                            <span>Sort by: Latest</span>
+                            <span id="tvCurrentSort">Sort by: Popularity</span>
                             <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </button>
                         <div class="sort-menu">
-                            <div class="sort-option active" onclick="sortTV('latest')">Latest</div>
+                            <div class="sort-option active" onclick="sortTV('popular')">Popularity</div>
                             <div class="sort-option" onclick="sortTV('rating')">Highest Rated</div>
-                            <div class="sort-option" onclick="sortTV('popular')">Most Popular</div>
+                            <div class="sort-option" onclick="sortTV('latest')">Latest</div>
                             <div class="sort-option" onclick="sortTV('title_az')">A-Z</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="movie-grid" id="allTVGrid"></div>
+                <div class="infinite-scroll-loader hidden" id="tvLoader">
+                    <div class="loader-spinner"></div>
+                    <span class="loader-text">Loading more shows...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP 50 PAGE - New dedicated page for IMDb Top 50 -->
+    <div class="page" id="page-top50">
+        <div class="page-content">
+            <div class="content-wrapper">
+                <div class="section-header" style="margin-bottom: 32px;">
+                    <h2 class="section-title">Top 50 Movies</h2>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Top rated movies according to IMDb</p>
+                </div>
+                
+                <div class="filters-container">
+                    <div class="search-filter-bar">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="top50SearchInput" placeholder="Search top 50 movies..." oninput="filterTop50(this.value)">
+                    </div>
+                    
+                    <div class="sort-dropdown" id="top50SortDropdown">
+                        <button class="sort-btn" onclick="toggleTop50Sort()">
+                            <span id="top50CurrentSort">Sort by: IMDb Rating</span>
+                            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </button>
+                        <div class="sort-menu">
+                            <div class="sort-option active" onclick="sortTop50('rating')">IMDb Rating</div>
+                            <div class="sort-option" onclick="sortTop50('popular')">Popularity</div>
+                            <div class="sort-option" onclick="sortTop50('latest')">Latest</div>
+                            <div class="sort-option" onclick="sortTop50('title_az')">A-Z</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top50-grid movie-grid" id="top50Grid"></div>
+                <div class="infinite-scroll-loader hidden" id="top50Loader">
+                    <div class="loader-spinner"></div>
+                    <span class="loader-text">Loading more movies...</span>
+                </div>
             </div>
         </div>
     </div>
@@ -2245,11 +2378,28 @@
         let watchedEpisodes = JSON.parse(localStorage.getItem('watchedEpisodes') || '{}');
         let continueWatching = JSON.parse(localStorage.getItem('continueWatching') || '[]');
         let myList = JSON.parse(localStorage.getItem('myList') || '[]');
+        let watchHistory = JSON.parse(localStorage.getItem('watchHistory') || '[]');
         let searchTimeout = null;
         let currentSearchResults = [];
         let currentSearchQuery = '';
         let currentGenreFilter = 'all';
-        let searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+
+        // Infinite scroll state
+        let moviesPage = 1;
+        let tvPage = 1;
+        let top50Page = 1;
+        let moviesLoading = false;
+        let tvLoading = false;
+        let top50Loading = false;
+        let hasMoreMovies = true;
+        let hasMoreTV = true;
+        let hasMoreTop50 = true;
+        let allMoviesData = [];
+        let allTVData = [];
+        let allTop50Data = [];
+        let currentMoviesSort = 'popular';
+        let currentTVSort = 'popular';
+        let currentTop50Sort = 'rating';
 
         // Cache for API data
         const cache = {
@@ -2258,7 +2408,8 @@
             hero: null,
             recommended: [],
             newReleases: [],
-            topRated: [],
+            topRatedMovies: [],
+            topRatedTV: [],
             trending: []
         };
 
@@ -2267,6 +2418,7 @@
 
         async function init() {
             setupNavigation();
+            setupInfiniteScroll();
             
             // Try to fetch from API
             const success = await fetchAllData();
@@ -2281,6 +2433,7 @@
             
             // Update continue watching
             updateContinueWatching();
+            updateWatchItAgain();
             
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.add('hidden');
@@ -2306,6 +2459,44 @@
                     closeAllSortDropdowns();
                 }
             });
+        }
+
+        function setupInfiniteScroll() {
+            // Movies infinite scroll
+            const moviesObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !moviesLoading && hasMoreMovies) {
+                        loadMoreMovies();
+                    }
+                });
+            }, { rootMargin: '100px' });
+
+            const moviesLoader = document.getElementById('moviesLoader');
+            if (moviesLoader) moviesObserver.observe(moviesLoader);
+
+            // TV infinite scroll
+            const tvObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !tvLoading && hasMoreTV) {
+                        loadMoreTV();
+                    }
+                });
+            }, { rootMargin: '100px' });
+
+            const tvLoader = document.getElementById('tvLoader');
+            if (tvLoader) tvObserver.observe(tvLoader);
+
+            // Top 50 infinite scroll
+            const top50Observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !top50Loading && hasMoreTop50) {
+                        loadMoreTop50();
+                    }
+                });
+            }, { rootMargin: '100px' });
+
+            const top50Loader = document.getElementById('top50Loader');
+            if (top50Loader) top50Observer.observe(top50Loader);
         }
 
         // Filter out items with 0.0 or below rating
@@ -2352,7 +2543,7 @@
             }, 3000);
         }
 
-        // GUI Modal (replaces alerts)
+        // GUI Modal
         function showGuiModal(options) {
             const modal = document.getElementById('guiModal');
             const icon = document.getElementById('guiIcon');
@@ -2434,14 +2625,18 @@
                 const newReleases = await fetchTMDB('/movie/now_playing');
                 if (newReleases?.results) cache.newReleases = filterByRating(newReleases.results);
 
-                document.getElementById('loadingText').textContent = 'Fetching top rated...';
-                const topRated = await fetchTMDB('/movie/top_rated');
-                if (topRated?.results) cache.topRated = filterByRating(topRated.results);
+                document.getElementById('loadingText').textContent = 'Fetching top rated movies...';
+                const topRatedMovies = await fetchTMDB('/movie/top_rated');
+                if (topRatedMovies?.results) cache.topRatedMovies = filterByRating(topRatedMovies.results);
+
+                document.getElementById('loadingText').textContent = 'Fetching top rated TV...';
+                const topRatedTV = await fetchTMDB('/tv/top_rated');
+                if (topRatedTV?.results) cache.topRatedTV = filterByRating(topRatedTV.results);
 
                 document.getElementById('loadingText').textContent = 'Fetching recommendations...';
                 await fetchRecommendations();
 
-                // Load hero from trending (already filtered)
+                // Load hero from trending
                 if (cache.trending.length > 0) {
                     const heroMovie = cache.trending[Math.floor(Math.random() * Math.min(5, cache.trending.length))];
                     const details = await fetchTMDB(`/movie/${heroMovie.id}`);
@@ -2462,7 +2657,6 @@
         }
 
         async function fetchRecommendations() {
-            // Get random movies for recommendations
             const randomPage = Math.floor(Math.random() * 5) + 1;
             const recs = await fetchTMDB('/discover/movie', `&sort_by=popularity.desc&page=${randomPage}`);
             if (recs?.results) {
@@ -2505,49 +2699,82 @@
             }
         }
 
-        // Load Home Sections
+        // Load Home Sections - Now only shows 4 items per section
         function loadHomeSections() {
-            // Recommended (randomized) - already filtered
-            document.getElementById('recommendedGrid').innerHTML = cache.recommended.map(m => createMovieCard(m, 'movie')).join('');
+            // Top 10 Movies
+            const top10Movies = cache.topRatedMovies.slice(0, 10);
+            document.getElementById('top10MoviesGrid').innerHTML = top10Movies.map((movie, index) => createTop10Card(movie, index + 1, 'movie')).join('');
 
-            // New Releases - already filtered
-            document.getElementById('newReleasesGrid').innerHTML = cache.newReleases.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
+            // Top 10 TV Shows
+            const top10TV = cache.topRatedTV.slice(0, 10);
+            document.getElementById('top10TVGrid').innerHTML = top10TV.map((show, index) => createTop10Card({...show, title: show.name}, index + 1, 'tv')).join('');
 
-            // Featured - filter combined array
-            const featured = [
-                ...cache.movies.slice(0, 3).map(m => ({...m, type: 'movie'})),
-                ...cache.tv.slice(0, 2).map(t => ({...t, title: t.name, type: 'tv'}))
-            ];
-            document.getElementById('featuredGrid').innerHTML = featured.map((item, i) => {
-                const isLarge = i === 0;
-                return `
-                    <div class="featured-card ${isLarge ? 'featured-large' : 'small'}" onclick="handleContentClick(${item.id}, '${item.type}')">
-                        <img src="${IMG_BASE}${item.backdrop_path || item.poster_path}" alt="${item.title}" loading="lazy">
-                        <div class="featured-content">
-                            ${isLarge ? '<span class="featured-tag">Featured</span>' : ''}
-                            <h3 class="featured-title">${item.title}</h3>
-                            <div class="featured-meta">
-                                <span style="color: #fbbf24; font-weight: 700;">★ ${item.vote_average?.toFixed(1) || '--'}</span>
-                                <span>${item.type === 'movie' ? 'Movie' : 'Series'}</span>
-                                <span>•</span>
-                                <span>${item.type === 'movie' ? (item.release_date?.split('-')[0] || '----') : (item.first_air_date?.split('-')[0] || '----')}</span>
-                            </div>
-                        </div>
+            // New Releases - Only 4 items
+            document.getElementById('newReleasesGrid').innerHTML = cache.newReleases.slice(0, 4).map(m => createMovieCard(m, 'movie')).join('');
+
+            // Trending Now - Only 4 items
+            document.getElementById('trendingGrid').innerHTML = cache.trending.slice(0, 4).map(m => createMovieCard(m, 'movie')).join('');
+
+            // Popular Series - Only 4 items
+            document.getElementById('popularGrid').innerHTML = cache.tv.slice(0, 4).map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+
+            // Recommended - Only 4 items
+            document.getElementById('recommendedGrid').innerHTML = cache.recommended.slice(0, 4).map(m => createMovieCard(m, 'movie')).join('');
+        }
+
+        // Create Top 10 Card
+        function createTop10Card(item, rank, type) {
+            return `
+                <div class="top-10-card" onclick="handleContentClick(${item.id}, '${type}')">
+                    <div class="top-10-number">${rank}</div>
+                    <div class="top-10-image">
+                        <img src="${IMG_POSTER}${item.poster_path}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450/1c1c1e/98989d?text=${encodeURIComponent(item.title)}'">
                     </div>
-                `;
+                </div>
+            `;
+        }
+
+        // Watch It Again
+        function updateWatchItAgain() {
+            const section = document.getElementById('watchItAgainSection');
+            const grid = document.getElementById('watchItAgainGrid');
+            
+            if (watchHistory.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            // Get unique items from history, most recent first
+            const uniqueHistory = [...new Map(watchHistory.slice().reverse().map(item => [item.id, item])).values()].slice(0, 6);
+            
+            grid.innerHTML = uniqueHistory.map(item => {
+                const displayItem = {
+                    id: item.id,
+                    title: item.title,
+                    poster_path: item.poster_path,
+                    vote_average: parseFloat(item.rating) || 0,
+                    release_date: item.year + '-01-01'
+                };
+                return createMovieCard(displayItem, item.type);
             }).join('');
+        }
 
-            // Trending - already filtered
-            document.getElementById('trendingGrid').innerHTML = cache.trending.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
-
-            // Popular TV - already filtered
-            document.getElementById('popularGrid').innerHTML = cache.tv.slice(0, 6).map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
-
-            // Top Rated - already filtered
-            document.getElementById('topRatedGrid').innerHTML = cache.topRated.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
-
-            // Because You Watched (if has history)
-            updateBecauseYouWatched();
+        function clearWatchHistory() {
+            showGuiModal({
+                type: 'confirm',
+                title: 'Clear History?',
+                message: 'This will remove all items from your watch history.',
+                buttons: [
+                    { text: 'Clear', primary: true, onClick: () => {
+                        watchHistory = [];
+                        localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+                        updateWatchItAgain();
+                        showToast('History cleared', 'success');
+                    }},
+                    { text: 'Cancel', primary: false, onClick: () => {} }
+                ]
+            });
         }
 
         async function refreshRecommendations() {
@@ -2555,7 +2782,7 @@
             icon.style.transform = 'rotate(360deg)';
             
             await fetchRecommendations();
-            document.getElementById('recommendedGrid').innerHTML = cache.recommended.map(m => createMovieCard(m, 'movie')).join('');
+            document.getElementById('recommendedGrid').innerHTML = cache.recommended.slice(0, 4).map(m => createMovieCard(m, 'movie')).join('');
             
             setTimeout(() => {
                 icon.style.transform = 'rotate(0deg)';
@@ -2564,38 +2791,7 @@
             showToast('Recommendations updated', 'success');
         }
 
-        function updateBecauseYouWatched() {
-            const section = document.getElementById('becauseYouWatchedSection');
-            const grid = document.getElementById('becauseYouWatchedGrid');
-            const title = document.getElementById('becauseYouWatchedTitle');
-            
-            if (continueWatching.length === 0) {
-                section.style.display = 'none';
-                return;
-            }
-
-            const lastWatched = continueWatching[continueWatching.length - 1];
-            const item = lastWatched.type === 'movie' 
-                ? cache.movies.find(m => m.id === lastWatched.id)
-                : cache.tv.find(t => t.id === lastWatched.id);
-
-            if (!item) {
-                section.style.display = 'none';
-                return;
-            }
-
-            section.style.display = 'block';
-            title.textContent = `Because You Watched ${item.title || item.name}`;
-            
-            // Get similar content (already filtered)
-            const similar = lastWatched.type === 'movie'
-                ? cache.movies.filter(m => m.id !== item.id).slice(0, 6)
-                : cache.tv.filter(t => t.id !== item.id).slice(0, 6);
-            
-            grid.innerHTML = similar.map(i => createMovieCard({...i, title: i.title || i.name}, lastWatched.type)).join('');
-        }
-
-        // Create Movie Card with Add to List button
+        // Create Movie Card - FIXED WISHLIST FUNCTIONALITY
         function createMovieCard(item, type) {
             const year = type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0];
             const totalEpisodes = type === 'tv' ? item.number_of_episodes : 1;
@@ -2636,15 +2832,49 @@
             `;
         }
 
-        // Toggle list from card
+        // FIXED: Toggle list from card - Now works with all content sources
         function toggleListFromCard(id, type, event) {
-            event.stopPropagation();
-            const item = type === 'movie'
-                ? cache.movies.find(m => m.id === id)
-                : cache.tv.find(t => t.id === id);
+            if (event) event.stopPropagation();
             
-            if (!item) return;
+            // Try to find item in all possible data sources
+            let item = null;
             
+            if (type === 'movie') {
+                item = cache.movies.find(m => m.id === id) || 
+                       allMoviesData.find(m => m.id === id) || 
+                       allTop50Data.find(m => m.id === id) ||
+                       cache.newReleases.find(m => m.id === id) ||
+                       cache.trending.find(m => m.id === id) ||
+                       cache.recommended.find(m => m.id === id) ||
+                       cache.topRatedMovies.find(m => m.id === id);
+            } else {
+                item = cache.tv.find(t => t.id === id) || 
+                       allTVData.find(t => t.id === id) ||
+                       cache.topRatedTV.find(t => t.id === id);
+            }
+            
+            if (!item) {
+                // If not in cache, try to fetch details
+                showToast('Adding to list...', 'success');
+                fetchItemDetails(id, type).then(details => {
+                    if (details) {
+                        addToListInternal(details, type);
+                    } else {
+                        showToast('Could not add to list', 'error');
+                    }
+                });
+                return;
+            }
+            
+            addToListInternal(item, type);
+        }
+
+        async function fetchItemDetails(id, type) {
+            const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
+            return await fetchTMDB(endpoint);
+        }
+
+        function addToListInternal(item, type) {
             const listItem = {
                 id: item.id,
                 title: item.title || item.name,
@@ -2654,7 +2884,7 @@
                 type: type
             };
             
-            const existingIndex = myList.findIndex(i => i.id === id && i.type === type);
+            const existingIndex = myList.findIndex(i => i.id === item.id && i.type === type);
             
             if (existingIndex > -1) {
                 myList.splice(existingIndex, 1);
@@ -2666,12 +2896,22 @@
             
             localStorage.setItem('myList', JSON.stringify(myList));
             
-            // Update button appearance
-            const btn = event.currentTarget;
-            const inList = existingIndex === -1;
-            btn.classList.toggle('in-list', inList);
-            btn.textContent = inList ? '✓' : '+';
-            btn.title = inList ? 'In List' : 'Add to List';
+            // Update all visible cards with this item
+            updateListButtons(item.id, type, existingIndex === -1);
+            
+            // If on mylist page, refresh it
+            if (document.getElementById('page-mylist').classList.contains('active')) {
+                loadMyList();
+            }
+        }
+
+        function updateListButtons(id, type, inList) {
+            const buttons = document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${type}"] .add-to-list-btn`);
+            buttons.forEach(btn => {
+                btn.classList.toggle('in-list', inList);
+                btn.textContent = inList ? '✓' : '+';
+                btn.title = inList ? 'In List' : 'Add to List';
+            });
         }
 
         // Progress Tracking
@@ -2680,11 +2920,11 @@
                 const watched = watchedEpisodes[`movie-${id}`];
                 return watched ? 100 : 0;
             } else {
-                const show = cache.tv.find(t => t.id === id);
+                const show = cache.tv.find(t => t.id === id) || allTVData.find(t => t.id === id);
                 if (!show) return 0;
                 const watched = watchedEpisodes[id] || {};
                 const watchedCount = Object.keys(watched).length;
-                return (watchedCount / show.number_of_episodes) * 100;
+                return (watchedCount / (show.number_of_episodes || 1)) * 100;
             }
         }
 
@@ -2703,8 +2943,8 @@
 
             const latest = continueWatching[continueWatching.length - 1];
             const item = latest.type === 'movie' 
-                ? cache.movies.find(m => m.id === latest.id)
-                : cache.tv.find(t => t.id === latest.id);
+                ? cache.movies.find(m => m.id === latest.id) || allMoviesData.find(m => m.id === latest.id)
+                : cache.tv.find(t => t.id === latest.id) || allTVData.find(t => t.id === latest.id);
 
             if (!item) {
                 container.style.display = 'none';
@@ -2754,7 +2994,6 @@
                 const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}&page=1`);
                 
                 if (results?.results) {
-                    // Filter out 0-rated items for suggestions
                     const filteredResults = filterByRating(results.results);
                     showSearchSuggestions(filteredResults.slice(0, 5));
                 }
@@ -2784,8 +3023,7 @@
                         </div>
                         <span class="suggestion-type" style="background: var(--bg-tertiary);">History</span>
                     </div>
-                `).join('')}
-            `;
+                `).join('')}`;
             container.classList.add('active');
         }
 
@@ -2817,8 +3055,7 @@
                             <span class="suggestion-type">${isMovie ? 'Movie' : 'TV'}</span>
                         </div>
                     `;
-                }).join('')}
-            `;
+                }).join('')}`;
 
             container.classList.add('active');
         }
@@ -2827,7 +3064,6 @@
             currentSearchQuery = query;
             document.getElementById('searchQueryDisplay').textContent = query;
             
-            // Add to history
             if (!searchHistory.includes(query)) {
                 searchHistory.unshift(query);
                 if (searchHistory.length > 10) searchHistory.pop();
@@ -2837,7 +3073,6 @@
             const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}&page=1`);
             
             if (results?.results) {
-                // Filter out 0-rated items
                 currentSearchResults = filterByRating(results.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv'));
                 document.getElementById('searchResultsCount').textContent = currentSearchResults.length;
                 displaySearchResults(currentSearchResults);
@@ -2896,6 +3131,10 @@
             document.getElementById('tvSortDropdown').classList.toggle('active');
         }
 
+        function toggleTop50Sort() {
+            document.getElementById('top50SortDropdown').classList.toggle('active');
+        }
+
         function closeAllSortDropdowns() {
             document.querySelectorAll('.sort-dropdown').forEach(d => d.classList.remove('active'));
         }
@@ -2925,7 +3164,6 @@
                     sorted.sort((a, b) => (b.title || b.name).localeCompare(a.title || a.name));
                     break;
                 default:
-                    // popularity - default order
                     break;
             }
             
@@ -2952,75 +3190,237 @@
             displaySearchResults(filtered);
         }
 
+        // Infinite Scroll for Movies
+        async function loadMoreMovies() {
+            if (moviesLoading || !hasMoreMovies) return;
+            
+            moviesLoading = true;
+            moviesPage++;
+            document.getElementById('moviesLoader').classList.remove('hidden');
+            
+            let sortParam = '';
+            switch(currentMoviesSort) {
+                case 'rating': sortParam = '&sort_by=vote_average.desc'; break;
+                case 'latest': sortParam = '&sort_by=release_date.desc'; break;
+                case 'title_az': sortParam = '&sort_by=original_title.asc'; break;
+                default: sortParam = '&sort_by=popularity.desc';
+            }
+            
+            const results = await fetchTMDB('/discover/movie', `&page=${moviesPage}${sortParam}`);
+            
+            if (results?.results) {
+                const filtered = filterByRating(results.results);
+                if (filtered.length === 0) {
+                    hasMoreMovies = false;
+                } else {
+                    allMoviesData = [...allMoviesData, ...filtered];
+                    appendMoviesToGrid(filtered);
+                }
+            } else {
+                hasMoreMovies = false;
+            }
+            
+            moviesLoading = false;
+            document.getElementById('moviesLoader').classList.add('hidden');
+        }
+
+        function appendMoviesToGrid(movies) {
+            const grid = document.getElementById('allMoviesGrid');
+            const html = movies.map(m => createMovieCard(m, 'movie')).join('');
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        // Infinite Scroll for TV
+        async function loadMoreTV() {
+            if (tvLoading || !hasMoreTV) return;
+            
+            tvLoading = true;
+            tvPage++;
+            document.getElementById('tvLoader').classList.remove('hidden');
+            
+            let sortParam = '';
+            switch(currentTVSort) {
+                case 'rating': sortParam = '&sort_by=vote_average.desc'; break;
+                case 'latest': sortParam = '&sort_by=first_air_date.desc'; break;
+                case 'title_az': sortParam = '&sort_by=original_name.asc'; break;
+                default: sortParam = '&sort_by=popularity.desc';
+            }
+            
+            const results = await fetchTMDB('/discover/tv', `&page=${tvPage}${sortParam}`);
+            
+            if (results?.results) {
+                const filtered = filterByRating(results.results);
+                if (filtered.length === 0) {
+                    hasMoreTV = false;
+                } else {
+                    allTVData = [...allTVData, ...filtered];
+                    appendTVToGrid(filtered);
+                }
+            } else {
+                hasMoreTV = false;
+            }
+            
+            tvLoading = false;
+            document.getElementById('tvLoader').classList.add('hidden');
+        }
+
+        function appendTVToGrid(shows) {
+            const grid = document.getElementById('allTVGrid');
+            const html = shows.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        // TOP 50 INFINITE SCROLL
+        async function loadMoreTop50() {
+            if (top50Loading || !hasMoreTop50) return;
+            
+            top50Loading = true;
+            top50Page++;
+            document.getElementById('top50Loader').classList.remove('hidden');
+            
+            // Fetch top rated movies (this is the IMDb Top 50 equivalent)
+            const results = await fetchTMDB('/movie/top_rated', `&page=${top50Page}`);
+            
+            if (results?.results) {
+                const filtered = filterByRating(results.results);
+                if (filtered.length === 0 || allTop50Data.length >= 50) {
+                    hasMoreTop50 = false;
+                } else {
+                    // Limit to 50 total
+                    const remainingSlots = 50 - allTop50Data.length;
+                    const toAdd = filtered.slice(0, remainingSlots);
+                    allTop50Data = [...allTop50Data, ...toAdd];
+                    appendTop50ToGrid(toAdd);
+                    
+                    if (allTop50Data.length >= 50) hasMoreTop50 = false;
+                }
+            } else {
+                hasMoreTop50 = false;
+            }
+            
+            top50Loading = false;
+            if (hasMoreTop50) {
+                document.getElementById('top50Loader').classList.add('hidden');
+            } else {
+                document.getElementById('top50Loader').style.display = 'none';
+            }
+        }
+
+        function appendTop50ToGrid(movies) {
+            const grid = document.getElementById('top50Grid');
+            const html = movies.map(m => createMovieCard(m, 'movie')).join('');
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        function filterTop50(query) {
+            const grid = document.getElementById('top50Grid');
+            if (!query) {
+                grid.innerHTML = allTop50Data.map(m => createMovieCard(m, 'movie')).join('');
+                return;
+            }
+            
+            const filtered = allTop50Data.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
+            grid.innerHTML = filtered.map(m => createMovieCard(m, 'movie')).join('');
+        }
+
+        function sortTop50(criteria) {
+            currentTop50Sort = criteria;
+            const labels = {
+                rating: 'IMDb Rating',
+                popular: 'Popularity',
+                latest: 'Latest',
+                title_az: 'A-Z'
+            };
+            document.getElementById('top50CurrentSort').textContent = `Sort by: ${labels[criteria]}`;
+            
+            event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+            event.target.classList.add('active');
+            closeAllSortDropdowns();
+            
+            let sorted = [...allTop50Data];
+            switch(criteria) {
+                case 'rating':
+                    sorted.sort((a, b) => b.vote_average - a.vote_average);
+                    break;
+                case 'popular':
+                    sorted.sort((a, b) => b.popularity - a.popularity);
+                    break;
+                case 'latest':
+                    sorted.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                    break;
+                case 'title_az':
+                    sorted.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+            }
+            
+            document.getElementById('top50Grid').innerHTML = sorted.map(m => createMovieCard(m, 'movie')).join('');
+        }
+
         // Movies and TV filtering
         function filterMovies(query) {
             const grid = document.getElementById('allMoviesGrid');
             if (!query) {
-                grid.innerHTML = cache.movies.map(m => createMovieCard(m, 'movie')).join('');
+                grid.innerHTML = allMoviesData.map(m => createMovieCard(m, 'movie')).join('');
                 return;
             }
             
-            const filtered = cache.movies.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
+            const filtered = allMoviesData.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
             grid.innerHTML = filtered.map(m => createMovieCard(m, 'movie')).join('');
         }
 
         function filterTV(query) {
             const grid = document.getElementById('allTVGrid');
             if (!query) {
-                grid.innerHTML = cache.tv.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+                grid.innerHTML = allTVData.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
                 return;
             }
             
-            const filtered = cache.tv.filter(t => t.name.toLowerCase().includes(query.toLowerCase()));
+            const filtered = allTVData.filter(t => t.name.toLowerCase().includes(query.toLowerCase()));
             grid.innerHTML = filtered.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
         }
 
-        function sortMovies(criteria) {
+        async function sortMovies(criteria) {
+            currentMoviesSort = criteria;
+            const labels = {
+                popular: 'Popularity',
+                rating: 'Highest Rated',
+                latest: 'Latest',
+                title_az: 'A-Z'
+            };
+            document.getElementById('moviesCurrentSort').textContent = `Sort by: ${labels[criteria]}`;
+            
             event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
             event.target.classList.add('active');
             closeAllSortDropdowns();
             
-            let sorted = [...cache.movies];
+            moviesPage = 1;
+            hasMoreMovies = true;
+            allMoviesData = [];
+            document.getElementById('allMoviesGrid').innerHTML = '';
             
-            switch(criteria) {
-                case 'rating':
-                    sorted.sort((a, b) => b.vote_average - a.vote_average);
-                    break;
-                case 'popular':
-                    sorted.sort((a, b) => b.popularity - a.popularity);
-                    break;
-                case 'title_az':
-                    sorted.sort((a, b) => a.title.localeCompare(b.title));
-                    break;
-                default: // latest
-                    sorted.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-            }
-            
-            document.getElementById('allMoviesGrid').innerHTML = sorted.map(m => createMovieCard(m, 'movie')).join('');
+            await loadMoreMovies();
         }
 
-        function sortTV(criteria) {
+        async function sortTV(criteria) {
+            currentTVSort = criteria;
+            const labels = {
+                popular: 'Popularity',
+                rating: 'Highest Rated',
+                latest: 'Latest',
+                title_az: 'A-Z'
+            };
+            document.getElementById('tvCurrentSort').textContent = `Sort by: ${labels[criteria]}`;
+            
             event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
             event.target.classList.add('active');
             closeAllSortDropdowns();
             
-            let sorted = [...cache.tv];
+            tvPage = 1;
+            hasMoreTV = true;
+            allTVData = [];
+            document.getElementById('allTVGrid').innerHTML = '';
             
-            switch(criteria) {
-                case 'rating':
-                    sorted.sort((a, b) => b.vote_average - a.vote_average);
-                    break;
-                case 'popular':
-                    sorted.sort((a, b) => b.popularity - a.popularity);
-                    break;
-                case 'title_az':
-                    sorted.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                default: // latest
-                    sorted.sort((a, b) => new Date(b.first_air_date) - new Date(a.first_air_date));
-            }
-            
-            document.getElementById('allTVGrid').innerHTML = sorted.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+            await loadMoreTV();
         }
 
         // Content Click Handler
@@ -3028,19 +3428,38 @@
             currentVideoType = type;
             currentVideoId = id;
 
+            // Add to watch history
+            const item = type === 'movie'
+                ? (cache.movies.find(m => m.id === id) || allMoviesData.find(m => m.id === id) || allTop50Data.find(m => m.id === id))
+                : (cache.tv.find(t => t.id === id) || allTVData.find(t => t.id === id));
+            
+            if (item) {
+                const historyItem = {
+                    id: item.id,
+                    title: item.title || item.name,
+                    poster_path: item.poster_path,
+                    rating: item.vote_average?.toFixed(1),
+                    year: type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
+                    type: type,
+                    timestamp: Date.now()
+                };
+                watchHistory.push(historyItem);
+                if (watchHistory.length > 50) watchHistory = watchHistory.slice(-50);
+                localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+                updateWatchItAgain();
+            }
+
             if (type === 'tv') {
                 currentTVId = id;
-                let show = cache.tv.find(t => t.id === id);
+                let show = cache.tv.find(t => t.id === id) || allTVData.find(t => t.id === id);
                 if (!show) {
                     show = await fetchTMDB(`/tv/${id}`);
-                    // Check rating before adding to cache
                     if (show && show.vote_average > 0) {
                         cache.tv.push(show);
                     }
                 }
                 
                 if (show && show.vote_average > 0) {
-                    // Check if user has progress
                     const progress = getWatchingProgress(id);
                     if (progress) {
                         showGuiModal({
@@ -3086,8 +3505,7 @@
                         <span>Season ${s.season_number}</span>
                         <span style="color: var(--text-secondary); font-size: 14px;">${s.episode_count} ep</span>
                     </button>
-                `).join('')}
-            `;
+                `).join('')}`;
 
             document.getElementById('episodeModal').classList.add('active');
             await loadEpisodes(currentSeason, show.id);
@@ -3166,10 +3584,8 @@
                 
                 localStorage.setItem('continueWatching', JSON.stringify(continueWatching));
                 updateContinueWatching();
-                updateBecauseYouWatched();
 
-                // Check if series completed
-                const show = cache.tv.find(t => t.id === currentTVId);
+                const show = cache.tv.find(t => t.id === currentTVId) || allTVData.find(t => t.id === currentTVId);
                 if (show && isSeriesCompleted(currentTVId, show.number_of_episodes)) {
                     showToast(`You've completed ${show.name}!`, 'success');
                 }
@@ -3213,7 +3629,7 @@
 
         function toggleEpisodeSelector() {
             if (currentVideoType === 'tv' && currentTVId) {
-                const show = cache.tv.find(t => t.id === currentTVId);
+                const show = cache.tv.find(t => t.id === currentTVId) || allTVData.find(t => t.id === currentTVId);
                 if (show) openEpisodeSelector(show);
             }
         }
@@ -3243,14 +3659,21 @@
             myList.push(item);
             localStorage.setItem('myList', JSON.stringify(myList));
             showToast('Added to My List', 'success');
+            
+            // Update button if visible
+            updateListButtons(item.id, item.type, true);
         }
 
         function removeFromList(id, event) {
-            event.stopPropagation();
+            if (event) event.stopPropagation();
             myList = myList.filter(item => item.id !== id);
             localStorage.setItem('myList', JSON.stringify(myList));
             loadMyList();
             showToast('Removed from My List', 'success');
+            
+            // Update buttons on other pages
+            const item = myList.find(i => i.id === id);
+            if (item) updateListButtons(id, item.type, false);
         }
 
         function clearMyList() {
@@ -3289,7 +3712,7 @@
             clearBtn.style.display = 'flex';
 
             grid.innerHTML = myList.map(item => `
-                <div class="movie-card" data-id="${item.id}">
+                <div class="movie-card" data-id="${item.id}" data-type="${item.type}">
                     <button class="remove-btn" onclick="removeFromList(${item.id}, event)" title="Remove">
                         <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                     </button>
@@ -3323,7 +3746,7 @@
             showPage(route);
         }
 
-        function showPage(route) {
+        async function showPage(route) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
             const pageId = `page-${route}`;
@@ -3350,11 +3773,23 @@
             window.scrollTo(0, 0);
 
             if (route === 'mylist') loadMyList();
-            if (route === 'movies') {
-                document.getElementById('allMoviesGrid').innerHTML = cache.movies.map(m => createMovieCard(m, 'movie')).join('');
+            if (route === 'movies' && allMoviesData.length === 0) {
+                document.getElementById('moviesLoader').classList.remove('hidden');
+                await loadMoreMovies();
             }
-            if (route === 'tv') {
-                document.getElementById('allTVGrid').innerHTML = cache.tv.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+            if (route === 'tv' && allTVData.length === 0) {
+                document.getElementById('tvLoader').classList.remove('hidden');
+                await loadMoreTV();
+            }
+            if (route === 'top50' && allTop50Data.length === 0) {
+                document.getElementById('top50Loader').classList.remove('hidden');
+                // Load first page of top 50
+                const results = await fetchTMDB('/movie/top_rated', '&page=1');
+                if (results?.results) {
+                    const filtered = filterByRating(results.results).slice(0, 20); // Load first 20 initially
+                    allTop50Data = filtered;
+                    document.getElementById('top50Grid').innerHTML = filtered.map(m => createMovieCard(m, 'movie')).join('');
+                }
             }
         }
 
