@@ -135,6 +135,102 @@
             color: var(--text-secondary);
         }
 
+        /* GUI Modal */
+        .gui-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 6000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gui-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .gui-content {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .gui-modal.active .gui-content {
+            transform: scale(1);
+        }
+
+        .gui-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gui-icon.success { background: rgba(48, 209, 88, 0.2); color: var(--success); }
+        .gui-icon.error { background: rgba(255, 59, 48, 0.2); color: var(--error); }
+        .gui-icon.warning { background: rgba(255, 159, 10, 0.2); color: var(--warning); }
+        .gui-icon.confirm { background: rgba(10, 132, 255, 0.2); color: var(--accent); }
+
+        .gui-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .gui-message {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .gui-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .gui-btn {
+            padding: 12px 24px;
+            border-radius: 100px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gui-btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .gui-btn-primary:hover {
+            background: #0070e0;
+        }
+
+        .gui-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .gui-btn-secondary:hover {
+            background: var(--glass-border);
+        }
+
         /* Navigation */
         .nav-container {
             position: fixed;
@@ -744,6 +840,43 @@
             opacity: 1;
         }
 
+        .add-to-list-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            z-index: 15;
+        }
+
+        .movie-card:hover .add-to-list-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .add-to-list-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .add-to-list-btn.in-list {
+            background: var(--success);
+            opacity: 1;
+            transform: scale(1);
+        }
+
         .progress-bar {
             position: absolute;
             bottom: 0;
@@ -957,6 +1090,154 @@
             font-size: 28px;
             margin-bottom: 12px;
             color: var(--text-primary);
+        }
+
+        /* Filters and Sort */
+        .filters-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-filter-bar {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-filter-bar input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-filter-bar input:focus {
+            border-color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        .search-filter-bar svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .sort-dropdown {
+            position: relative;
+        }
+
+        .sort-btn {
+            padding: 12px 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sort-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        .sort-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .sort-dropdown.active .sort-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .sort-option {
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sort-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sort-option.active {
+            color: var(--accent);
+        }
+
+        .genre-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .genre-chip {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .genre-chip:hover {
+            background: var(--bg-secondary);
+        }
+
+        .genre-chip.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Search Results Page */
+        .search-header {
+            margin-bottom: 40px;
+        }
+
+        .search-header h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .search-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .results-count {
+            color: var(--accent);
+            font-weight: 600;
         }
 
         /* Episode Selector */
@@ -1269,6 +1550,8 @@
             .featured-grid { grid-template-columns: 1fr 1fr; }
             .featured-large { grid-row: span 1; }
             .search-suggestions { width: 100%; right: 0; }
+            .filters-container { flex-direction: column; align-items: stretch; }
+            .search-filter-bar { min-width: 100%; }
         }
 
         @media (max-width: 768px) {
@@ -1283,6 +1566,7 @@
             .search-bar.active { width: 250px; }
             .toast-container { left: 24px; right: 24px; bottom: 24px; }
             .toast { min-width: auto; width: 100%; }
+            .genre-filter { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; }
         }
 
         /* Scrollbar */
@@ -1303,6 +1587,20 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- GUI Modal -->
+    <div class="gui-modal" id="guiModal">
+        <div class="gui-content">
+            <div class="gui-icon" id="guiIcon">
+                <svg class="icon icon-lg" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h3 class="gui-title" id="guiTitle">Title</h3>
+            <p class="gui-message" id="guiMessage">Message</p>
+            <div class="gui-buttons" id="guiButtons">
+                <button class="gui-btn gui-btn-primary" onclick="closeGuiModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <div class="nav-container" id="navContainer">
         <nav>
@@ -1319,7 +1617,7 @@
                         <button class="search-btn" onclick="toggleSearch()">
                             <svg class="icon" viewBox="0 0 24 24" style="width: 20px; height: 20px;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                         </button>
-                        <input type="text" id="searchInput" placeholder="Search movies, shows..." oninput="handleSearch(this.value)" onkeydown="handleSearchKey(event)">
+                        <input type="text" id="searchInput" placeholder="Search movies, shows..." oninput="handleSearchInput(this.value)" onkeydown="handleSearchKey(event)">
                     </div>
                     <div class="search-suggestions" id="searchSuggestions"></div>
                 </div>
@@ -1371,6 +1669,28 @@
             <!-- Continue Watching -->
             <div id="continueWatchingContainer" style="display: none;"></div>
 
+            <!-- Recommended For You -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Recommended For You</h2>
+                    <button class="see-all" onclick="refreshRecommendations()">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="transform: rotate(0deg); transition: transform 0.3s;" id="refreshIcon"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        Refresh
+                    </button>
+                </div>
+                <div class="movie-grid" id="recommendedGrid"></div>
+            </section>
+
+            <!-- New Releases -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">New Releases</h2>
+                    <button class="see-all" onclick="router('movies')">See All</button>
+                </div>
+                <div class="movie-grid" id="newReleasesGrid"></div>
+            </section>
+
+            <!-- Featured This Week -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">Featured This Week</h2>
@@ -1379,6 +1699,7 @@
                 <div class="featured-grid" id="featuredGrid"></div>
             </section>
 
+            <!-- Trending Now -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">Trending Now</h2>
@@ -1387,6 +1708,7 @@
                 <div class="movie-grid" id="trendingGrid"></div>
             </section>
 
+            <!-- Popular Series -->
             <section class="section">
                 <div class="section-header">
                     <h2 class="section-title">Popular Series</h2>
@@ -1394,6 +1716,76 @@
                 </div>
                 <div class="movie-grid" id="popularGrid"></div>
             </section>
+
+            <!-- Top Rated -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Top Rated</h2>
+                    <button class="see-all" onclick="router('movies')">See All</button>
+                </div>
+                <div class="movie-grid" id="topRatedGrid"></div>
+            </section>
+
+            <!-- Because You Watched -->
+            <section class="section" id="becauseYouWatchedSection" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title" id="becauseYouWatchedTitle">Because You Watched</h2>
+                </div>
+                <div class="movie-grid" id="becauseYouWatchedGrid"></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- SEARCH RESULTS PAGE -->
+    <div class="page" id="page-search">
+        <div class="page-content">
+            <div class="content-wrapper">
+                <div class="search-header">
+                    <h2>Search Results</h2>
+                    <p>Found <span class="results-count" id="searchResultsCount">0</span> results for "<span id="searchQueryDisplay"></span>"</p>
+                </div>
+                
+                <div class="filters-container">
+                    <div class="search-filter-bar">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchResultsInput" placeholder="Refine your search..." oninput="filterSearchResults(this.value)">
+                    </div>
+                    
+                    <div class="sort-dropdown" id="sortDropdown">
+                        <button class="sort-btn" onclick="toggleSortDropdown()">
+                            <span id="currentSort">Sort by: Popularity</span>
+                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </button>
+                        <div class="sort-menu">
+                            <div class="sort-option active" onclick="sortResults('popularity', 'Popularity')">Popularity</div>
+                            <div class="sort-option" onclick="sortResults('rating', 'Rating (High to Low)')">Rating (High to Low)</div>
+                            <div class="sort-option" onclick="sortResults('date_new', 'Date (Newest)')">Date (Newest)</div>
+                            <div class="sort-option" onclick="sortResults('date_old', 'Date (Oldest)')">Date (Oldest)</div>
+                            <div class="sort-option" onclick="sortResults('title_az', 'Title (A-Z)')">Title (A-Z)</div>
+                            <div class="sort-option" onclick="sortResults('title_za', 'Title (Z-A)')">Title (Z-A)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="genre-filter" id="searchGenreFilter">
+                    <div class="genre-chip active" onclick="filterByGenre('all')">All</div>
+                    <div class="genre-chip" onclick="filterByGenre(28)">Action</div>
+                    <div class="genre-chip" onclick="filterByGenre(35)">Comedy</div>
+                    <div class="genre-chip" onclick="filterByGenre(18)">Drama</div>
+                    <div class="genre-chip" onclick="filterByGenre(27)">Horror</div>
+                    <div class="genre-chip" onclick="filterByGenre(10749)">Romance</div>
+                    <div class="genre-chip" onclick="filterByGenre(878)">Sci-Fi</div>
+                    <div class="genre-chip" onclick="filterByGenre(53)">Thriller</div>
+                </div>
+
+                <div class="movie-grid" id="searchResultsGrid"></div>
+                
+                <div id="noSearchResults" class="empty-state" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <h2>No results found</h2>
+                    <p>Try adjusting your search or filters</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1401,9 +1793,30 @@
     <div class="page" id="page-movies">
         <div class="page-content">
             <div class="content-wrapper">
-                <div class="section-header" style="margin-bottom: 40px;">
+                <div class="section-header" style="margin-bottom: 32px;">
                     <h2 class="section-title">All Movies</h2>
                 </div>
+                
+                <div class="filters-container">
+                    <div class="search-filter-bar">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="moviesSearchInput" placeholder="Search movies..." oninput="filterMovies(this.value)">
+                    </div>
+                    
+                    <div class="sort-dropdown" id="moviesSortDropdown">
+                        <button class="sort-btn" onclick="toggleMoviesSort()">
+                            <span>Sort by: Latest</span>
+                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </button>
+                        <div class="sort-menu">
+                            <div class="sort-option active" onclick="sortMovies('latest')">Latest</div>
+                            <div class="sort-option" onclick="sortMovies('rating')">Highest Rated</div>
+                            <div class="sort-option" onclick="sortMovies('popular')">Most Popular</div>
+                            <div class="sort-option" onclick="sortMovies('title_az')">A-Z</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="movie-grid" id="allMoviesGrid"></div>
             </div>
         </div>
@@ -1413,9 +1826,30 @@
     <div class="page" id="page-tv">
         <div class="page-content">
             <div class="content-wrapper">
-                <div class="section-header" style="margin-bottom: 40px;">
+                <div class="section-header" style="margin-bottom: 32px;">
                     <h2 class="section-title">TV Shows</h2>
                 </div>
+                
+                <div class="filters-container">
+                    <div class="search-filter-bar">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="tvSearchInput" placeholder="Search TV shows..." oninput="filterTV(this.value)">
+                    </div>
+                    
+                    <div class="sort-dropdown" id="tvSortDropdown">
+                        <button class="sort-btn" onclick="toggleTVSort()">
+                            <span>Sort by: Latest</span>
+                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </button>
+                        <div class="sort-menu">
+                            <div class="sort-option active" onclick="sortTV('latest')">Latest</div>
+                            <div class="sort-option" onclick="sortTV('rating')">Highest Rated</div>
+                            <div class="sort-option" onclick="sortTV('popular')">Most Popular</div>
+                            <div class="sort-option" onclick="sortTV('title_az')">A-Z</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="movie-grid" id="allTVGrid"></div>
             </div>
         </div>
@@ -1497,12 +1931,19 @@
         let continueWatching = JSON.parse(localStorage.getItem('continueWatching') || '[]');
         let myList = JSON.parse(localStorage.getItem('myList') || '[]');
         let searchTimeout = null;
+        let currentSearchResults = [];
+        let currentSearchQuery = '';
+        let currentGenreFilter = 'all';
 
         // Cache for API data
         const cache = {
             movies: [],
             tv: [],
-            hero: null
+            hero: null,
+            recommended: [],
+            newReleases: [],
+            topRated: [],
+            trending: []
         };
 
         // Initialize
@@ -1545,6 +1986,9 @@
                 if (!e.target.closest('.search-container')) {
                     closeSearch();
                 }
+                if (!e.target.closest('.sort-dropdown')) {
+                    closeAllSortDropdowns();
+                }
             });
         }
 
@@ -1576,14 +2020,57 @@
 
             container.appendChild(toast);
             
-            // Trigger animation
             setTimeout(() => toast.classList.add('show'), 10);
             
-            // Remove after 3 seconds
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // GUI Modal (replaces alerts)
+        function showGuiModal(options) {
+            const modal = document.getElementById('guiModal');
+            const icon = document.getElementById('guiIcon');
+            const title = document.getElementById('guiTitle');
+            const message = document.getElementById('guiMessage');
+            const buttons = document.getElementById('guiButtons');
+
+            icon.className = `gui-icon ${options.type || 'confirm'}`;
+            
+            const icons = {
+                success: '<svg class="icon icon-lg" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+                error: '<svg class="icon icon-lg" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+                warning: '<svg class="icon icon-lg" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+                confirm: '<svg class="icon icon-lg" viewBox="0 0 24 24" style="fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'
+            };
+
+            icon.innerHTML = icons[options.type || 'confirm'];
+            title.textContent = options.title || 'Confirm';
+            message.textContent = options.message || '';
+
+            buttons.innerHTML = '';
+            
+            if (options.buttons) {
+                options.buttons.forEach(btn => {
+                    const button = document.createElement('button');
+                    button.className = `gui-btn ${btn.primary ? 'gui-btn-primary' : 'gui-btn-secondary'}`;
+                    button.textContent = btn.text;
+                    button.onclick = () => {
+                        closeGuiModal();
+                        if (btn.onClick) btn.onClick();
+                    };
+                    buttons.appendChild(button);
+                });
+            } else {
+                buttons.innerHTML = '<button class="gui-btn gui-btn-primary" onclick="closeGuiModal()">OK</button>';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeGuiModal() {
+            document.getElementById('guiModal').classList.remove('active');
         }
 
         // API Functions
@@ -1616,12 +2103,24 @@
                 const tv = await fetchTMDB('/tv/popular', '&page=1');
                 if (tv?.results) cache.tv = tv.results;
 
-                document.getElementById('loadingText').textContent = 'Fetching featured content...';
+                document.getElementById('loadingText').textContent = 'Fetching trending...';
                 const trending = await fetchTMDB('/trending/movie/week');
-                
-                // Load hero from trending or popular
+                if (trending?.results) cache.trending = trending.results;
+
+                document.getElementById('loadingText').textContent = 'Fetching new releases...';
+                const newReleases = await fetchTMDB('/movie/now_playing');
+                if (newReleases?.results) cache.newReleases = newReleases.results;
+
+                document.getElementById('loadingText').textContent = 'Fetching top rated...';
+                const topRated = await fetchTMDB('/movie/top_rated');
+                if (topRated?.results) cache.topRated = topRated.results;
+
+                document.getElementById('loadingText').textContent = 'Fetching recommendations...';
+                await fetchRecommendations();
+
+                // Load hero from trending
                 if (trending?.results?.length > 0) {
-                    const heroMovie = trending.results[0];
+                    const heroMovie = trending.results[Math.floor(Math.random() * Math.min(5, trending.results.length))];
                     const details = await fetchTMDB(`/movie/${heroMovie.id}`);
                     if (details) {
                         cache.hero = details;
@@ -1629,16 +2128,32 @@
                     }
                 }
 
-                // Load grids
-                loadFeatured();
-                loadTrending();
-                loadPopularTV();
+                // Load all sections
+                loadHomeSections();
 
                 return true;
             } catch (error) {
                 console.error('Failed to fetch data:', error);
                 return false;
             }
+        }
+
+        async function fetchRecommendations() {
+            // Get random movies for recommendations
+            const randomPage = Math.floor(Math.random() * 5) + 1;
+            const recs = await fetchTMDB('/discover/movie', `&sort_by=popularity.desc&page=${randomPage}`);
+            if (recs?.results) {
+                cache.recommended = shuffleArray(recs.results).slice(0, 6);
+            }
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
         }
 
         // Load Hero
@@ -1667,17 +2182,20 @@
             }
         }
 
-        // Load Featured
-        function loadFeatured() {
-            const container = document.getElementById('featuredGrid');
-            if (!cache.movies.length && !cache.tv.length) return;
+        // Load Home Sections
+        function loadHomeSections() {
+            // Recommended (randomized)
+            document.getElementById('recommendedGrid').innerHTML = cache.recommended.map(m => createMovieCard(m, 'movie')).join('');
 
-            const items = [
+            // New Releases
+            document.getElementById('newReleasesGrid').innerHTML = cache.newReleases.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
+
+            // Featured
+            const featured = [
                 ...cache.movies.slice(0, 3).map(m => ({...m, type: 'movie'})),
                 ...cache.tv.slice(0, 2).map(t => ({...t, title: t.name, type: 'tv'}))
             ];
-
-            container.innerHTML = items.map((item, i) => {
+            document.getElementById('featuredGrid').innerHTML = featured.map((item, i) => {
                 const isLarge = i === 0;
                 return `
                     <div class="featured-card ${isLarge ? 'featured-large' : 'small'}" onclick="handleContentClick(${item.id}, '${item.type}')">
@@ -1695,37 +2213,90 @@
                     </div>
                 `;
             }).join('');
+
+            // Trending
+            document.getElementById('trendingGrid').innerHTML = cache.trending.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
+
+            // Popular TV
+            document.getElementById('popularGrid').innerHTML = cache.tv.slice(0, 6).map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+
+            // Top Rated
+            document.getElementById('topRatedGrid').innerHTML = cache.topRated.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
+
+            // Because You Watched (if has history)
+            updateBecauseYouWatched();
         }
 
-        // Load Trending
-        function loadTrending() {
-            const container = document.getElementById('trendingGrid');
-            if (!cache.movies.length) return;
-            container.innerHTML = cache.movies.slice(0, 6).map(m => createMovieCard(m, 'movie')).join('');
+        async function refreshRecommendations() {
+            const icon = document.getElementById('refreshIcon');
+            icon.style.transform = 'rotate(360deg)';
+            
+            await fetchRecommendations();
+            document.getElementById('recommendedGrid').innerHTML = cache.recommended.map(m => createMovieCard(m, 'movie')).join('');
+            
+            setTimeout(() => {
+                icon.style.transform = 'rotate(0deg)';
+            }, 300);
+            
+            showToast('Recommendations updated', 'success');
         }
 
-        // Load Popular TV
-        function loadPopularTV() {
-            const container = document.getElementById('popularGrid');
-            if (!cache.tv.length) return;
-            container.innerHTML = cache.tv.slice(0, 6).map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+        function updateBecauseYouWatched() {
+            const section = document.getElementById('becauseYouWatchedSection');
+            const grid = document.getElementById('becauseYouWatchedGrid');
+            const title = document.getElementById('becauseYouWatchedTitle');
+            
+            if (continueWatching.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            const lastWatched = continueWatching[continueWatching.length - 1];
+            const item = lastWatched.type === 'movie' 
+                ? cache.movies.find(m => m.id === lastWatched.id)
+                : cache.tv.find(t => t.id === lastWatched.id);
+
+            if (!item) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            title.textContent = `Because You Watched ${item.title || item.name}`;
+            
+            // Get similar content
+            const similar = lastWatched.type === 'movie'
+                ? cache.movies.filter(m => m.id !== item.id).slice(0, 6)
+                : cache.tv.filter(t => t.id !== item.id).slice(0, 6);
+            
+            grid.innerHTML = similar.map(i => createMovieCard({...i, title: i.title || i.name}, lastWatched.type)).join('');
         }
 
-        // Create Movie Card
+        // Create Movie Card with Add to List button
         function createMovieCard(item, type) {
             const year = type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0];
-            const isCompleted = type === 'tv' ? isSeriesCompleted(item.id, item.number_of_episodes) : false;
+            const totalEpisodes = type === 'tv' ? item.number_of_episodes : 1;
+            const isCompleted = type === 'tv' ? isSeriesCompleted(item.id, totalEpisodes) : false;
             const progress = getProgress(item.id, type);
+            const inList = myList.some(i => i.id === item.id && i.type === type);
             
             return `
-                <div class="movie-card ${isCompleted ? 'completed' : ''}" onclick="handleContentClick(${item.id}, '${type}')" data-id="${item.id}" data-type="${type}">
+                <div class="movie-card ${isCompleted ? 'completed' : ''}" data-id="${item.id}" data-type="${type}">
+                    <button class="add-to-list-btn ${inList ? 'in-list' : ''}" onclick="toggleListFromCard(${item.id}, '${type}', event)" title="${inList ? 'In List' : 'Add to List'}">
+                        <svg class="icon icon-sm" style="fill: white;" viewBox="0 0 24 24">
+                            ${inList 
+                                ? '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>' 
+                                : '<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>'
+                            }
+                        </svg>
+                    </button>
                     ${isCompleted ? `
                         <div class="completed-badge">
                             <svg class="icon icon-sm" style="fill: white;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                         </div>
                     ` : ''}
                     <img src="${IMG_POSTER}${item.poster_path}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450/1c1c1e/98989d?text=${encodeURIComponent(item.title)}'">
-                    ${progress > 0 ? `
+                    ${progress > 0 && progress < 100 ? `
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${progress}%"></div>
                         </div>
@@ -1733,7 +2304,7 @@
                     <div class="play-icon">
                         <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
-                    <div class="movie-overlay">
+                    <div class="movie-overlay" onclick="handleContentClick(${item.id}, '${type}')">
                         <div class="movie-title">${item.title}</div>
                         <div class="movie-meta">
                             <span class="movie-rating">
@@ -1745,6 +2316,51 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Toggle list from card
+        function toggleListFromCard(id, type, event) {
+            event.stopPropagation();
+            const item = type === 'movie'
+                ? cache.movies.find(m => m.id === id)
+                : cache.tv.find(t => t.id === id);
+            
+            if (!item) return;
+            
+            const listItem = {
+                id: item.id,
+                title: item.title || item.name,
+                poster_path: item.poster_path,
+                rating: item.vote_average?.toFixed(1),
+                year: type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
+                type: type
+            };
+            
+            const existingIndex = myList.findIndex(i => i.id === id && i.type === type);
+            
+            if (existingIndex > -1) {
+                myList.splice(existingIndex, 1);
+                showToast('Removed from My List', 'success');
+            } else {
+                myList.push(listItem);
+                showToast('Added to My List', 'success');
+            }
+            
+            localStorage.setItem('myList', JSON.stringify(myList));
+            
+            // Update button appearance
+            const btn = event.currentTarget;
+            const inList = existingIndex === -1;
+            btn.classList.toggle('in-list', inList);
+            btn.innerHTML = `
+                <svg class="icon icon-sm" style="fill: white;" viewBox="0 0 24 24">
+                    ${inList 
+                        ? '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>' 
+                        : '<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>'
+                    }
+                </svg>
+            `;
+            btn.title = inList ? 'In List' : 'Add to List';
         }
 
         // Progress Tracking
@@ -1829,7 +2445,7 @@
             document.getElementById('searchSuggestions').classList.remove('active');
         }
 
-        async function handleSearch(query) {
+        function handleSearchInput(query) {
             if (!query.trim()) {
                 document.getElementById('searchSuggestions').classList.remove('active');
                 return;
@@ -1850,9 +2466,7 @@
                 const query = e.target.value;
                 if (query) {
                     closeSearch();
-                    router('search');
-                    // Would implement search results page
-                    showToast(`Searching for "${query}"...`, 'success');
+                    performSearch(query);
                 }
             }
         }
@@ -1882,9 +2496,196 @@
             container.classList.add('active');
         }
 
+        async function performSearch(query) {
+            currentSearchQuery = query;
+            document.getElementById('searchQueryDisplay').textContent = query;
+            
+            const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}&page=1`);
+            
+            if (results?.results) {
+                currentSearchResults = results.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv');
+                document.getElementById('searchResultsCount').textContent = currentSearchResults.length;
+                displaySearchResults(currentSearchResults);
+            }
+            
+            router('search');
+        }
+
+        function displaySearchResults(results) {
+            const grid = document.getElementById('searchResultsGrid');
+            const noResults = document.getElementById('noSearchResults');
+            
+            if (results.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            grid.innerHTML = results.map(item => {
+                const type = item.media_type;
+                const displayItem = {...item, title: item.title || item.name};
+                return createMovieCard(displayItem, type);
+            }).join('');
+        }
+
+        function filterSearchResults(query) {
+            if (!query) {
+                displaySearchResults(currentSearchResults);
+                return;
+            }
+            
+            const filtered = currentSearchResults.filter(item => {
+                const title = (item.title || item.name).toLowerCase();
+                return title.includes(query.toLowerCase());
+            });
+            
+            displaySearchResults(filtered);
+        }
+
         function selectSearchResult(id, type) {
             closeSearch();
             handleContentClick(id, type === 'movie' ? 'movie' : 'tv');
+        }
+
+        // Sort and Filter
+        function toggleSortDropdown() {
+            document.getElementById('sortDropdown').classList.toggle('active');
+        }
+
+        function toggleMoviesSort() {
+            document.getElementById('moviesSortDropdown').classList.toggle('active');
+        }
+
+        function toggleTVSort() {
+            document.getElementById('tvSortDropdown').classList.toggle('active');
+        }
+
+        function closeAllSortDropdowns() {
+            document.querySelectorAll('.sort-dropdown').forEach(d => d.classList.remove('active'));
+        }
+
+        function sortResults(criteria, label) {
+            document.getElementById('currentSort').textContent = `Sort by: ${label}`;
+            document.querySelectorAll('#sortDropdown .sort-option').forEach(o => o.classList.remove('active'));
+            event.target.classList.add('active');
+            closeAllSortDropdowns();
+            
+            let sorted = [...currentSearchResults];
+            
+            switch(criteria) {
+                case 'rating':
+                    sorted.sort((a, b) => b.vote_average - a.vote_average);
+                    break;
+                case 'date_new':
+                    sorted.sort((a, b) => new Date(b.release_date || b.first_air_date) - new Date(a.release_date || a.first_air_date));
+                    break;
+                case 'date_old':
+                    sorted.sort((a, b) => new Date(a.release_date || a.first_air_date) - new Date(b.release_date || b.first_air_date));
+                    break;
+                case 'title_az':
+                    sorted.sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name));
+                    break;
+                case 'title_za':
+                    sorted.sort((a, b) => (b.title || b.name).localeCompare(a.title || a.name));
+                    break;
+                default:
+                    // popularity - default order
+                    break;
+            }
+            
+            displaySearchResults(sorted);
+        }
+
+        function filterByGenre(genreId) {
+            currentGenreFilter = genreId;
+            
+            document.querySelectorAll('#searchGenreFilter .genre-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (genreId === 'all') {
+                displaySearchResults(currentSearchResults);
+                return;
+            }
+            
+            const filtered = currentSearchResults.filter(item => {
+                return item.genre_ids && item.genre_ids.includes(parseInt(genreId));
+            });
+            
+            displaySearchResults(filtered);
+        }
+
+        // Movies and TV filtering
+        function filterMovies(query) {
+            const grid = document.getElementById('allMoviesGrid');
+            if (!query) {
+                grid.innerHTML = cache.movies.map(m => createMovieCard(m, 'movie')).join('');
+                return;
+            }
+            
+            const filtered = cache.movies.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
+            grid.innerHTML = filtered.map(m => createMovieCard(m, 'movie')).join('');
+        }
+
+        function filterTV(query) {
+            const grid = document.getElementById('allTVGrid');
+            if (!query) {
+                grid.innerHTML = cache.tv.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+                return;
+            }
+            
+            const filtered = cache.tv.filter(t => t.name.toLowerCase().includes(query.toLowerCase()));
+            grid.innerHTML = filtered.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
+        }
+
+        function sortMovies(criteria) {
+            event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+            event.target.classList.add('active');
+            closeAllSortDropdowns();
+            
+            let sorted = [...cache.movies];
+            
+            switch(criteria) {
+                case 'rating':
+                    sorted.sort((a, b) => b.vote_average - a.vote_average);
+                    break;
+                case 'popular':
+                    sorted.sort((a, b) => b.popularity - a.popularity);
+                    break;
+                case 'title_az':
+                    sorted.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                default: // latest
+                    sorted.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+            }
+            
+            document.getElementById('allMoviesGrid').innerHTML = sorted.map(m => createMovieCard(m, 'movie')).join('');
+        }
+
+        function sortTV(criteria) {
+            event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+            event.target.classList.add('active');
+            closeAllSortDropdowns();
+            
+            let sorted = [...cache.tv];
+            
+            switch(criteria) {
+                case 'rating':
+                    sorted.sort((a, b) => b.vote_average - a.vote_average);
+                    break;
+                case 'popular':
+                    sorted.sort((a, b) => b.popularity - a.popularity);
+                    break;
+                case 'title_az':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                default: // latest
+                    sorted.sort((a, b) => new Date(b.first_air_date) - new Date(a.first_air_date));
+            }
+            
+            document.getElementById('allTVGrid').innerHTML = sorted.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
         }
 
         // Content Click Handler
@@ -1894,7 +2695,6 @@
 
             if (type === 'tv') {
                 currentTVId = id;
-                // Fetch show details if not in cache
                 let show = cache.tv.find(t => t.id === id);
                 if (!show) {
                     show = await fetchTMDB(`/tv/${id}`);
@@ -1905,24 +2705,25 @@
                     // Check if user has progress
                     const progress = getWatchingProgress(id);
                     if (progress) {
-                        // Ask to resume or start from beginning
-                        if (confirm(`Resume from S${progress.season}E${progress.episode}?`)) {
-                            playEpisode(progress.season, progress.episode, progress.episodeName, false);
-                            return;
-                        }
+                        showGuiModal({
+                            type: 'confirm',
+                            title: 'Resume Watching?',
+                            message: `Continue from S${progress.season}E${progress.episode} - ${progress.episodeName}?`,
+                            buttons: [
+                                { text: 'Resume', primary: true, onClick: () => {
+                                    playEpisode(progress.season, progress.episode, progress.episodeName, false);
+                                }},
+                                { text: 'Start Over', primary: false, onClick: () => {
+                                    openEpisodeSelector(show);
+                                }}
+                            ]
+                        });
+                        return;
                     }
                     openEpisodeSelector(show);
                 }
             } else {
-                // For movies, check if watched
-                const isWatched = watchedEpisodes[`movie-${id}`];
                 playContent(`https://vidfast.pro/movie/${id}`, 'movie', id);
-                
-                // Mark as watched when finished (simulate)
-                setTimeout(() => {
-                    watchedEpisodes[`movie-${id}`] = true;
-                    localStorage.setItem('watchedEpisodes', JSON.stringify(watchedEpisodes));
-                }, 5000);
             }
         }
 
@@ -1937,7 +2738,6 @@
             document.getElementById('episodeShowTitle').textContent = show.name;
             document.getElementById('episodeShowMeta').textContent = `${show.number_of_seasons} Seasons • ${show.number_of_episodes} Episodes`;
 
-            // Fetch seasons
             const seasonsData = await fetchTMDB(`/tv/${show.id}`);
             const seasons = seasonsData?.seasons?.filter(s => s.season_number > 0) || [];
 
@@ -2002,12 +2802,10 @@
             currentEpisode = episode;
 
             if (saveProgress) {
-                // Mark as watched
                 if (!watchedEpisodes[currentTVId]) watchedEpisodes[currentTVId] = {};
                 watchedEpisodes[currentTVId][`${season}-${episode}`] = true;
                 localStorage.setItem('watchedEpisodes', JSON.stringify(watchedEpisodes));
 
-                // Update continue watching
                 const existingIndex = continueWatching.findIndex(c => c.id === currentTVId && c.type === 'tv');
                 const newEntry = {
                     id: currentTVId,
@@ -2024,13 +2822,13 @@
                     continueWatching.push(newEntry);
                 }
                 
-                // Keep only last 10
                 if (continueWatching.length > 10) {
                     continueWatching = continueWatching.slice(-10);
                 }
                 
                 localStorage.setItem('continueWatching', JSON.stringify(continueWatching));
                 updateContinueWatching();
+                updateBecauseYouWatched();
 
                 // Check if series completed
                 const show = cache.tv.find(t => t.id === currentTVId);
@@ -2039,7 +2837,6 @@
                 }
             }
 
-            // Reload episodes to show updated status
             await loadEpisodes(season, currentTVId);
 
             const url = `https://vidfast.pro/tv/${currentTVId}/${season}/${episode}?autoPlay=true`;
@@ -2121,12 +2918,20 @@
         function clearMyList() {
             if (!myList.length) return;
             
-            if (confirm('Clear your entire list?')) {
-                myList = [];
-                localStorage.setItem('myList', JSON.stringify(myList));
-                loadMyList();
-                showToast('List cleared', 'success');
-            }
+            showGuiModal({
+                type: 'confirm',
+                title: 'Clear List?',
+                message: 'Are you sure you want to remove all items from your list?',
+                buttons: [
+                    { text: 'Clear', primary: true, onClick: () => {
+                        myList = [];
+                        localStorage.setItem('myList', JSON.stringify(myList));
+                        loadMyList();
+                        showToast('List cleared', 'success');
+                    }},
+                    { text: 'Cancel', primary: false, onClick: () => {} }
+                ]
+            });
         }
 
         function loadMyList() {
@@ -2178,10 +2983,8 @@
         }
 
         function showPage(route) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
-            // Show selected page
             const pageId = `page-${route}`;
             const page = document.getElementById(pageId);
             
@@ -2192,12 +2995,10 @@
                 route = 'home';
             }
 
-            // Update nav active state
             document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
             const navLink = document.getElementById(`nav-${route}`);
             if (navLink) navLink.classList.add('active');
 
-            // Show/hide logo based on page
             const logo = document.getElementById('navLogo');
             if (route === 'home') {
                 logo.classList.remove('hidden');
@@ -2205,31 +3006,15 @@
                 logo.classList.add('hidden');
             }
 
-            // Scroll to top
             window.scrollTo(0, 0);
 
-            // Load page-specific content
             if (route === 'mylist') loadMyList();
-            if (route === 'movies') loadAllMovies();
-            if (route === 'tv') loadAllTV();
-        }
-
-        function loadAllMovies() {
-            const container = document.getElementById('allMoviesGrid');
-            if (!cache.movies.length) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Loading movies...</div>';
-                return;
+            if (route === 'movies') {
+                document.getElementById('allMoviesGrid').innerHTML = cache.movies.map(m => createMovieCard(m, 'movie')).join('');
             }
-            container.innerHTML = cache.movies.map(m => createMovieCard(m, 'movie')).join('');
-        }
-
-        function loadAllTV() {
-            const container = document.getElementById('allTVGrid');
-            if (!cache.tv.length) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Loading TV shows...</div>';
-                return;
+            if (route === 'tv') {
+                document.getElementById('allTVGrid').innerHTML = cache.tv.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
             }
-            container.innerHTML = cache.tv.map(t => createMovieCard({...t, title: t.name}, 'tv')).join('');
         }
 
         // Close modals on background click
@@ -2244,7 +3029,9 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (document.getElementById('episodeModal').classList.contains('active')) {
+                if (document.getElementById('guiModal').classList.contains('active')) {
+                    closeGuiModal();
+                } else if (document.getElementById('episodeModal').classList.contains('active')) {
                     closeEpisodeSelector();
                 } else {
                     closeVideo();
