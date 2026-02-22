@@ -424,7 +424,7 @@
             gap: 16px;
         }
 
-        /* Search Bar */
+        /* Search Bar - Unified Style */
         .search-container {
             position: relative;
         }
@@ -1405,40 +1405,6 @@
             align-items: center;
         }
 
-        .search-filter-bar {
-            flex: 1;
-            min-width: 300px;
-            position: relative;
-        }
-
-        .search-filter-bar input {
-            width: 100%;
-            padding: 14px 16px 14px 48px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 15px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-filter-bar input:focus {
-            border-color: var(--accent);
-            background: var(--bg-secondary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-filter-bar svg {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            width: 20px;
-            height: 20px;
-        }
-
         .sort-dropdown {
             position: relative;
         }
@@ -1506,36 +1472,6 @@
             background: rgba(99, 102, 241, 0.1);
         }
 
-        .genre-filter {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .genre-chip {
-            padding: 10px 18px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--glass-border);
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .genre-chip:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .genre-chip.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
         /* Pagination Controls */
         .pagination {
             display: flex;
@@ -1576,6 +1512,8 @@
             font-size: 14px;
             color: var(--text-secondary);
             font-weight: 600;
+            min-width: 100px;
+            text-align: center;
         }
 
         /* Search Results Page */
@@ -1967,7 +1905,6 @@
             .hero-title { font-size: 56px; }
             .search-suggestions { width: 100%; right: 0; }
             .filters-container { flex-direction: column; align-items: stretch; }
-            .search-filter-bar { min-width: 100%; }
             .search-bar { width: 240px; }
         }
 
@@ -1982,7 +1919,6 @@
             .search-bar { width: 200px; }
             .toast-container { left: 16px; right: 16px; bottom: 16px; }
             .toast { min-width: auto; width: 100%; }
-            .genre-filter { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; }
             .pagination { flex-wrap: wrap; }
         }
 
@@ -2068,14 +2004,14 @@
                 </li>
             </ul>
             <div class="nav-actions">
-                <div class="search-container">
-                    <div class="search-bar" id="searchBar">
-                        <button class="search-btn" onclick="performGlobalSearch()">
+                <div class="search-container" id="topSearchContainer">
+                    <div class="search-bar" id="topSearchBar">
+                        <button class="search-btn" onclick="performGlobalSearch(document.getElementById('topSearchInput').value)">
                             <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                         </button>
-                        <input type="text" id="searchInput" placeholder="Search movies, shows..." oninput="handleSearchInput(this.value)" onkeydown="handleSearchKey(event)" onfocus="showSearchHistory()">
+                        <input type="text" id="topSearchInput" placeholder="Search movies, shows..." oninput="handleTopSearchInput(this.value)" onkeydown="if(event.key==='Enter')performGlobalSearch(this.value)" onfocus="showTopSearchHistory()">
                     </div>
-                    <div class="search-suggestions" id="searchSuggestions"></div>
+                    <div class="search-suggestions" id="topSearchSuggestions"></div>
                 </div>
                 <div class="user-avatar">CS</div>
             </div>
@@ -2195,11 +2131,6 @@
                 </div>
                 
                 <div class="filters-container">
-                    <div class="search-filter-bar">
-                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                        <input type="text" id="searchResultsInput" placeholder="Refine results..." oninput="filterCurrentResults(this.value)">
-                    </div>
-                    
                     <div class="sort-dropdown" id="sortDropdown">
                         <button class="sort-btn" onclick="toggleSortDropdown()">
                             <span id="currentSort">Sort by: Popularity</span>
@@ -2214,23 +2145,12 @@
                     </div>
                 </div>
 
-                <div class="genre-filter" id="searchGenreFilter">
-                    <div class="genre-chip active" onclick="filterByGenre('all')">All</div>
-                    <div class="genre-chip" onclick="filterByGenre(28)">Action</div>
-                    <div class="genre-chip" onclick="filterByGenre(35)">Comedy</div>
-                    <div class="genre-chip" onclick="filterByGenre(18)">Drama</div>
-                    <div class="genre-chip" onclick="filterByGenre(27)">Horror</div>
-                    <div class="genre-chip" onclick="filterByGenre(10749)">Romance</div>
-                    <div class="genre-chip" onclick="filterByGenre(878)">Sci-Fi</div>
-                    <div class="genre-chip" onclick="filterByGenre(53)">Thriller</div>
-                </div>
-
                 <div class="movie-grid" id="searchResultsGrid"></div>
                 
                 <div id="noSearchResults" class="empty-state" style="display: none;">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                     <h2>No results found</h2>
-                    <p>Try adjusting your search or filters</p>
+                    <p>Try adjusting your search</p>
                 </div>
 
                 <div class="pagination" id="searchPagination" style="display: none;">
@@ -2257,9 +2177,15 @@
                 </div>
                 
                 <div class="filters-container">
-                    <div class="search-filter-bar">
-                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                        <input type="text" id="moviesSearchInput" placeholder="Search in movies..." oninput="filterLibrary('movie', this.value)">
+                    <!-- Exact replica of top search bar -->
+                    <div class="search-container" style="flex: 1; max-width: 400px;">
+                        <div class="search-bar" id="moviesSearchBar">
+                            <button class="search-btn" onclick="performMoviesSearch(document.getElementById('moviesSearchInput').value)">
+                                <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                            </button>
+                            <input type="text" id="moviesSearchInput" placeholder="Search all movies..." oninput="handleMoviesSearchInput(this.value)" onkeydown="if(event.key==='Enter')performMoviesSearch(this.value)" onfocus="showMoviesSearchHistory()">
+                        </div>
+                        <div class="search-suggestions" id="moviesSearchSuggestions"></div>
                     </div>
                     
                     <div class="sort-dropdown" id="moviesSortDropdown">
@@ -2283,12 +2209,12 @@
                 </div>
 
                 <div class="pagination" id="moviesPagination">
-                    <button class="pagination-btn" id="moviesPrevBtn" onclick="changeLibraryPage('movie', -1)">
+                    <button class="pagination-btn" id="moviesPrevBtn" onclick="changePage('movie', -1)">
                         <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
                         Previous
                     </button>
                     <span class="page-info">Page <span id="moviesCurrentPage">1</span></span>
-                    <button class="pagination-btn" id="moviesNextBtn" onclick="changeLibraryPage('movie', 1)">
+                    <button class="pagination-btn" id="moviesNextBtn" onclick="changePage('movie', 1)">
                         Next
                         <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                     </button>
@@ -2306,9 +2232,15 @@
                 </div>
                 
                 <div class="filters-container">
-                    <div class="search-filter-bar">
-                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                        <input type="text" id="tvSearchInput" placeholder="Search in TV shows..." oninput="filterLibrary('tv', this.value)">
+                    <!-- Exact replica of top search bar -->
+                    <div class="search-container" style="flex: 1; max-width: 400px;">
+                        <div class="search-bar" id="tvSearchBar">
+                            <button class="search-btn" onclick="performTVSearch(document.getElementById('tvSearchInput').value)">
+                                <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                            </button>
+                            <input type="text" id="tvSearchInput" placeholder="Search all TV shows..." oninput="handleTVSearchInput(this.value)" onkeydown="if(event.key==='Enter')performTVSearch(this.value)" onfocus="showTVSearchHistory()">
+                        </div>
+                        <div class="search-suggestions" id="tvSearchSuggestions"></div>
                     </div>
                     
                     <div class="sort-dropdown" id="tvSortDropdown">
@@ -2332,12 +2264,12 @@
                 </div>
 
                 <div class="pagination" id="tvPagination">
-                    <button class="pagination-btn" id="tvPrevBtn" onclick="changeLibraryPage('tv', -1)">
+                    <button class="pagination-btn" id="tvPrevBtn" onclick="changePage('tv', -1)">
                         <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
                         Previous
                     </button>
                     <span class="page-info">Page <span id="tvCurrentPage">1</span></span>
-                    <button class="pagination-btn" id="tvNextBtn" onclick="changeLibraryPage('tv', 1)">
+                    <button class="pagination-btn" id="tvNextBtn" onclick="changePage('tv', 1)">
                         Next
                         <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                     </button>
@@ -2428,32 +2360,41 @@
         let continueWatching = JSON.parse(localStorage.getItem('continueWatching') || '[]');
         let watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
         let watchHistory = JSON.parse(localStorage.getItem('watchHistory') || '[]');
-        let searchTimeout = null;
-        let currentSearchResults = [];
-        let currentSearchQuery = '';
-        let currentGenreFilter = 'all';
-        let searchTotalPages = 1;
-        let searchCurrentPage = 1;
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        
+        // Unified search state
+        let globalSearchState = {
+            query: '',
+            results: [],
+            currentPage: 1,
+            totalPages: 1
+        };
 
-        // Library state with pagination
+        // IDENTICAL state structure for movies and TV
         const libraryState = {
             movie: {
                 items: [],
                 filteredItems: [],
+                displayedItems: [],
                 currentPage: 1,
                 itemsPerPage: 20,
                 currentSort: 'rating',
-                totalLoaded: 0,
-                isLoading: false
+                isLoading: false,
+                searchQuery: '',
+                searchResults: [],
+                totalPages: 1
             },
             tv: {
                 items: [],
                 filteredItems: [],
+                displayedItems: [],
                 currentPage: 1,
                 itemsPerPage: 20,
                 currentSort: 'rating',
-                totalLoaded: 0,
-                isLoading: false
+                isLoading: false,
+                searchQuery: '',
+                searchResults: [],
+                totalPages: 1
             }
         };
 
@@ -2502,12 +2443,13 @@
                 showPage(hash);
             });
 
+            // Close dropdowns when clicking outside
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.search-container')) {
-                    document.getElementById('searchSuggestions').classList.remove('active');
+                    document.querySelectorAll('.search-suggestions').forEach(el => el.classList.remove('active'));
                 }
                 if (!e.target.closest('.sort-dropdown')) {
-                    closeAllSortDropdowns();
+                    document.querySelectorAll('.sort-dropdown').forEach(el => el.classList.remove('active'));
                 }
             });
         }
@@ -2518,17 +2460,8 @@
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             
-            const icons = {
-                success: '✓',
-                error: '✕',
-                warning: '!'
-            };
-
-            const titles = {
-                success: 'Success',
-                error: 'Error',
-                warning: 'Notice'
-            };
+            const icons = { success: '✓', error: '✕', warning: '!' };
+            const titles = { success: 'Success', error: 'Error', warning: 'Notice' };
 
             toast.innerHTML = `
                 <div class="toast-icon">${icons[type]}</div>
@@ -2539,9 +2472,7 @@
             `;
 
             container.appendChild(toast);
-            
             setTimeout(() => toast.classList.add('show'), 10);
-            
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
@@ -2556,12 +2487,7 @@
             const message = document.getElementById('guiMessage');
             const buttons = document.getElementById('guiButtons');
 
-            const icons = {
-                success: '✓',
-                error: '✕',
-                warning: '!',
-                confirm: '?'
-            };
+            const icons = { success: '✓', error: '✕', warning: '!', confirm: '?' };
 
             icon.textContent = icons[options.type || 'confirm'];
             icon.className = `gui-icon ${options.type || 'confirm'}`;
@@ -2615,7 +2541,6 @@
         async function fetchAllData() {
             try {
                 document.getElementById('loadingText').textContent = 'Fetching top rated movies...';
-                // Fetch top rated movies
                 const topRatedMovies = await fetchTMDB('/movie/top_rated', '&vote_count.gte=1000');
                 if (topRatedMovies?.results) {
                     cache.topRatedMovies = await filterValidItems(topRatedMovies.results.slice(0, 20), 'movie');
@@ -2645,7 +2570,6 @@
                 }
 
                 document.getElementById('loadingText').textContent = 'Fetching new releases...';
-                // Fix: Use discover with recent dates instead of now_playing
                 const today = new Date().toISOString().split('T')[0];
                 const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
                 const newReleases = await fetchTMDB('/discover/movie', `&primary_release_date.gte=${threeMonthsAgo}&primary_release_date.lte=${today}&sort_by=popularity.desc`);
@@ -2656,7 +2580,6 @@
                 document.getElementById('loadingText').textContent = 'Fetching recommendations...';
                 await fetchRecommendations();
 
-                // Load hero from top rated
                 if (cache.topRatedMovies.length > 0) {
                     const heroMovie = cache.topRatedMovies[Math.floor(Math.random() * Math.min(5, cache.topRatedMovies.length))];
                     const details = await fetchTMDB(`/movie/${heroMovie.id}`);
@@ -2692,18 +2615,12 @@
             return newArray;
         }
 
-        // Filter valid items
         async function filterValidItems(items, type) {
-            const validItems = [];
-            for (const item of items) {
+            return items.filter(item => {
                 const rating = item.vote_average || 0;
                 const hasPoster = item.poster_path && item.poster_path !== null && item.poster_path !== '';
-                
-                if (rating > 0 && hasPoster) {
-                    validItems.push(item);
-                }
-            }
-            return validItems;
+                return rating > 0 && hasPoster;
+            });
         }
 
         // Load Hero
@@ -2725,12 +2642,7 @@
                 document.getElementById('heroDuration').textContent = '--';
             }
 
-            if (movie.genres?.length > 0) {
-                document.getElementById('heroGenre').textContent = movie.genres[0].name;
-            } else {
-                document.getElementById('heroGenre').textContent = 'Movie';
-            }
-
+            document.getElementById('heroGenre').textContent = movie.genres?.[0]?.name || 'Movie';
             updateHeroWatchlistButton();
         }
 
@@ -2739,13 +2651,8 @@
             const text = document.getElementById('heroWatchlistText');
             const inList = watchlist.some(i => i.id === currentHeroId && i.type === currentHeroType);
             
-            if (inList) {
-                btn.classList.add('in-list');
-                text.textContent = 'In Watchlist';
-            } else {
-                btn.classList.remove('in-list');
-                text.textContent = 'Add to Watchlist';
-            }
+            btn.classList.toggle('in-list', inList);
+            text.textContent = inList ? 'In Watchlist' : 'Add to Watchlist';
         }
 
         function toggleHeroWatchlist() {
@@ -2757,15 +2664,14 @@
                 watchlist = watchlist.filter(i => !(i.id === currentHeroId && i.type === currentHeroType));
                 showToast('Removed from Watchlist', 'success');
             } else {
-                const item = {
+                watchlist.push({
                     id: cache.hero.id,
                     title: cache.hero.title,
                     poster_path: cache.hero.poster_path,
                     rating: cache.hero.vote_average?.toFixed(1),
                     year: cache.hero.release_date?.split('-')[0],
                     type: 'movie'
-                };
-                watchlist.push(item);
+                });
                 showToast('Added to Watchlist', 'success');
             }
             
@@ -2776,19 +2682,16 @@
 
         // Load Home Sections
         function loadHomeSections() {
-            // Top 10 Movies with working watchlist buttons
             const top10Movies = cache.topRatedMovies.slice(0, 10);
             document.getElementById('top10MoviesGrid').innerHTML = top10Movies.map((movie, index) => 
                 createTop10Card(movie, index + 1, 'movie')
             ).join('');
 
-            // Top 10 TV Shows
             const top10TV = cache.topRatedTV.slice(0, 10);
             document.getElementById('top10TVGrid').innerHTML = top10TV.map((show, index) => 
                 createTop10Card({...show, title: show.name}, index + 1, 'tv')
             ).join('');
 
-            // New Releases (Fixed)
             document.getElementById('newReleasesGrid').innerHTML = cache.newReleases.slice(0, 5).map(m => 
                 createMovieCard(m, 'movie')
             ).join('') || '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">No new releases found</p>';
@@ -2806,7 +2709,7 @@
             ).join('');
         }
 
-        // Create Top 10 Card - FIXED with working watchlist
+        // Create Top 10 Card
         function createTop10Card(item, rank, type) {
             const inList = watchlist.some(i => i.id === item.id && i.type === type);
             const title = item.title || item.name;
@@ -2826,83 +2729,13 @@
             `;
         }
 
-        // Fixed Top 10 watchlist toggle
         async function toggleTop10Watchlist(id, type) {
-            event.stopPropagation();
+            let item = type === 'movie' 
+                ? (cache.topRatedMovies.find(m => m.id === id) || cache.movies.find(m => m.id === id))
+                : (cache.topRatedTV.find(t => t.id === id) || cache.tv.find(t => t.id === id));
             
-            // Find item in cache
-            let item = null;
-            if (type === 'movie') {
-                item = cache.topRatedMovies.find(m => m.id === id) ||
-                       cache.movies.find(m => m.id === id);
-            } else {
-                item = cache.topRatedTV.find(t => t.id === id) ||
-                       cache.tv.find(t => t.id === id);
-            }
-            
-            if (!item) {
-                // Fetch if not in cache
-                item = await fetchItemDetails(id, type);
-            }
-            
-            if (item) {
-                toggleListFromCard(id, type, event);
-            }
-        }
-
-        function updateWatchItAgain() {
-            const section = document.getElementById('watchItAgainSection');
-            const grid = document.getElementById('watchItAgainGrid');
-            
-            if (watchHistory.length === 0) {
-                section.style.display = 'none';
-                return;
-            }
-
-            section.style.display = 'block';
-            const uniqueHistory = [...new Map(watchHistory.slice().reverse().map(item => [item.id, item])).values()].slice(0, 6);
-            
-            grid.innerHTML = uniqueHistory.map(item => {
-                const displayItem = {
-                    id: item.id,
-                    title: item.title,
-                    poster_path: item.poster_path,
-                    vote_average: parseFloat(item.rating) || 0,
-                    release_date: item.year + '-01-01'
-                };
-                return createMovieCard(displayItem, item.type);
-            }).join('');
-        }
-
-        function clearWatchHistory() {
-            showGuiModal({
-                type: 'confirm',
-                title: 'Clear History?',
-                message: 'This will remove all items from your watch history.',
-                buttons: [
-                    { text: 'Clear', primary: true, onClick: () => {
-                        watchHistory = [];
-                        localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
-                        updateWatchItAgain();
-                        showToast('History cleared', 'success');
-                    }},
-                    { text: 'Cancel', primary: false, onClick: () => {} }
-                ]
-            });
-        }
-
-        async function refreshRecommendations() {
-            const icon = document.getElementById('refreshIcon');
-            icon.style.transform = 'rotate(360deg)';
-            
-            await fetchRecommendations();
-            document.getElementById('recommendedGrid').innerHTML = cache.recommended.slice(0, 5).map(m => createMovieCard(m, 'movie')).join('');
-            
-            setTimeout(() => {
-                icon.style.transform = 'rotate(0deg)';
-            }, 300);
-            
-            showToast('Recommendations updated', 'success');
+            if (!item) item = await fetchItemDetails(id, type);
+            if (item) toggleListFromCard(id, type, event);
         }
 
         // Create Movie Card
@@ -2951,28 +2784,23 @@
             if (event) event.stopPropagation();
             
             let item = null;
-            
             if (type === 'movie') {
                 item = cache.movies.find(m => m.id === id) || 
                        cache.topRatedMovies.find(m => m.id === id) ||
-                       cache.newReleases.find(m => m.id === id) ||
-                       cache.trending.find(m => m.id === id) ||
-                       cache.recommended.find(m => m.id === id) ||
-                       libraryState.movie.items.find(m => m.id === id);
+                       libraryState.movie.items.find(m => m.id === id) ||
+                       libraryState.movie.searchResults.find(m => m.id === id);
             } else {
                 item = cache.tv.find(t => t.id === id) || 
                        cache.topRatedTV.find(t => t.id === id) ||
-                       libraryState.tv.items.find(t => t.id === id);
+                       libraryState.tv.items.find(t => t.id === id) ||
+                       libraryState.tv.searchResults.find(t => t.id === id);
             }
             
             if (!item) {
                 showToast('Adding to watchlist...', 'success');
                 fetchItemDetails(id, type).then(details => {
-                    if (details) {
-                        addToWatchlistInternal(details, type);
-                    } else {
-                        showToast('Could not add to watchlist', 'error');
-                    }
+                    if (details) addToWatchlistInternal(details, type);
+                    else showToast('Could not add to watchlist', 'error');
                 });
                 return;
             }
@@ -2981,8 +2809,7 @@
         }
 
         async function fetchItemDetails(id, type) {
-            const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
-            return await fetchTMDB(endpoint);
+            return await fetchTMDB(type === 'movie' ? `/movie/${id}` : `/tv/${id}`);
         }
 
         function addToWatchlistInternal(item, type) {
@@ -2992,15 +2819,14 @@
                 watchlist = watchlist.filter(i => !(i.id === item.id && i.type === type));
                 showToast('Removed from Watchlist', 'success');
             } else {
-                const listItem = {
+                watchlist.push({
                     id: item.id,
                     title: item.title || item.name,
                     poster_path: item.poster_path,
                     rating: item.vote_average?.toFixed(1),
                     year: type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
                     type: type
-                };
-                watchlist.push(listItem);
+                });
                 showToast('Added to Watchlist', 'success');
             }
             
@@ -3017,15 +2843,7 @@
         }
 
         function updateWatchlistButtons(id, type, inList) {
-            // Update all cards
-            document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${type}"] .add-to-list-btn`).forEach(btn => {
-                btn.classList.toggle('in-list', inList);
-                btn.textContent = inList ? '✓' : '+';
-                btn.title = inList ? 'In Watchlist' : 'Add to Watchlist';
-            });
-            
-            // Update top 10 cards
-            document.querySelectorAll(`.top-10-card[data-id="${id}"][data-type="${type}"] .add-to-list-btn`).forEach(btn => {
+            document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${type}"] .add-to-list-btn, .top-10-card[data-id="${id}"][data-type="${type}"] .add-to-list-btn`).forEach(btn => {
                 btn.classList.toggle('in-list', inList);
                 btn.textContent = inList ? '✓' : '+';
                 btn.title = inList ? 'In Watchlist' : 'Add to Watchlist';
@@ -3034,14 +2852,12 @@
 
         function getProgress(id, type) {
             if (type === 'movie') {
-                const watched = watchedEpisodes[`movie-${id}`];
-                return watched ? 100 : 0;
+                return watchedEpisodes[`movie-${id}`] ? 100 : 0;
             } else {
                 const show = cache.tv.find(t => t.id === id) || libraryState.tv.items.find(t => t.id === id);
                 if (!show) return 0;
                 const watched = watchedEpisodes[id] || {};
-                const watchedCount = Object.keys(watched).length;
-                return (watchedCount / (show.number_of_episodes || 1)) * 100;
+                return (Object.keys(watched).length / (show.number_of_episodes || 1)) * 100;
             }
         }
 
@@ -3059,8 +2875,8 @@
 
             const latest = continueWatching[continueWatching.length - 1];
             const item = latest.type === 'movie' 
-                ? cache.movies.find(m => m.id === latest.id) || cache.topRatedMovies.find(m => m.id === latest.id)
-                : cache.tv.find(t => t.id === latest.id) || cache.topRatedTV.find(t => t.id === latest.id);
+                ? (cache.movies.find(m => m.id === latest.id) || cache.topRatedMovies.find(m => m.id === latest.id))
+                : (cache.tv.find(t => t.id === latest.id) || cache.topRatedTV.find(t => t.id === latest.id));
 
             if (!item) {
                 container.style.display = 'none';
@@ -3098,104 +2914,90 @@
             }
         }
 
-        // Search Functionality - FIXED to search ALL pages
-        function handleSearchInput(query) {
-            if (!query.trim()) {
-                document.getElementById('searchSuggestions').classList.remove('active');
+        function updateWatchItAgain() {
+            const section = document.getElementById('watchItAgainSection');
+            const grid = document.getElementById('watchItAgainGrid');
+            
+            if (watchHistory.length === 0) {
+                section.style.display = 'none';
                 return;
             }
 
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(async () => {
+            section.style.display = 'block';
+            const uniqueHistory = [...new Map(watchHistory.slice().reverse().map(item => [item.id, item])).values()].slice(0, 6);
+            
+            grid.innerHTML = uniqueHistory.map(item => {
+                const displayItem = {
+                    id: item.id,
+                    title: item.title,
+                    poster_path: item.poster_path,
+                    vote_average: parseFloat(item.rating) || 0,
+                    release_date: item.year + '-01-01'
+                };
+                return createMovieCard(displayItem, item.type);
+            }).join('');
+        }
+
+        function clearWatchHistory() {
+            showGuiModal({
+                type: 'confirm',
+                title: 'Clear History?',
+                message: 'This will remove all items from your watch history.',
+                buttons: [
+                    { text: 'Clear', primary: true, onClick: () => {
+                        watchHistory = [];
+                        localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+                        updateWatchItAgain();
+                        showToast('History cleared', 'success');
+                    }},
+                    { text: 'Cancel', primary: false }
+                ]
+            });
+        }
+
+        async function refreshRecommendations() {
+            const icon = document.getElementById('refreshIcon');
+            icon.style.transform = 'rotate(360deg)';
+            
+            await fetchRecommendations();
+            document.getElementById('recommendedGrid').innerHTML = cache.recommended.slice(0, 5).map(m => createMovieCard(m, 'movie')).join('');
+            
+            setTimeout(() => icon.style.transform = 'rotate(0deg)', 300);
+            showToast('Recommendations updated', 'success');
+        }
+
+        // ==========================================
+        // TOP SEARCH BAR (Navigation)
+        // ==========================================
+        
+        let topSearchTimeout = null;
+
+        function handleTopSearchInput(query) {
+            if (!query.trim()) {
+                document.getElementById('topSearchSuggestions').classList.remove('active');
+                return;
+            }
+
+            clearTimeout(topSearchTimeout);
+            topSearchTimeout = setTimeout(async () => {
                 const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(query)}&page=1`);
-                
                 if (results?.results) {
-                    const filteredResults = await filterValidItems(
+                    const filtered = await filterValidItems(
                         results.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv'), 
                         'multi'
                     );
-                    showSearchSuggestions(filteredResults.slice(0, 5));
+                    showTopSearchSuggestions(filtered.slice(0, 5));
                 }
             }, 300);
         }
 
-        function handleSearchKey(e) {
-            if (e.key === 'Enter') {
-                const query = e.target.value.trim();
-                if (query) {
-                    document.getElementById('searchSuggestions').classList.remove('active');
-                    performGlobalSearch(query);
-                }
-            }
-        }
-
-        // Global search that searches through ALL pages
-        async function performGlobalSearch(query) {
-            if (!query) query = document.getElementById('searchInput').value.trim();
-            if (!query) return;
+        function showTopSearchHistory() {
+            if (searchHistory.length === 0) return;
             
-            currentSearchQuery = query;
-            searchCurrentPage = 1;
-            
-            document.getElementById('searchQueryDisplay').textContent = query;
-            document.getElementById('searchResultsInput').value = '';
-            
-            // Save to history
-            if (!watchHistory.includes(query)) {
-                watchHistory.unshift(query);
-                if (watchHistory.length > 10) watchHistory.pop();
-                localStorage.setItem('searchHistory', JSON.stringify(watchHistory));
-            }
-            
-            router('search');
-            
-            // Show loading
-            document.getElementById('searchResultsGrid').innerHTML = '';
-            document.getElementById('noSearchResults').style.display = 'none';
-            document.getElementById('searchPagination').style.display = 'none';
-            
-            await loadSearchPage(1);
-        }
-
-        async function loadSearchPage(page) {
-            const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(currentSearchQuery)}&page=${page}`);
-            
-            if (results?.results) {
-                currentSearchResults = await filterValidItems(
-                    results.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv'), 
-                    'multi'
-                );
-                
-                searchTotalPages = results.total_pages || 1;
-                searchCurrentPage = page;
-                
-                document.getElementById('searchResultsCount').textContent = results.total_results || currentSearchResults.length;
-                displaySearchResults(currentSearchResults);
-                
-                // Update pagination
-                document.getElementById('searchCurrentPage').textContent = page;
-                document.getElementById('searchTotalPages').textContent = searchTotalPages;
-                document.getElementById('searchPrevBtn').disabled = page === 1;
-                document.getElementById('searchNextBtn').disabled = page >= searchTotalPages;
-                document.getElementById('searchPagination').style.display = searchTotalPages > 1 ? 'flex' : 'none';
-            }
-        }
-
-        function changeSearchPage(direction) {
-            const newPage = searchCurrentPage + direction;
-            if (newPage >= 1 && newPage <= searchTotalPages) {
-                loadSearchPage(newPage);
-                window.scrollTo(0, 0);
-            }
-        }
-
-        function showSearchHistory() {
-            if (watchHistory.length === 0) return;
-            
-            const container = document.getElementById('searchSuggestions');
+            const container = document.getElementById('topSearchSuggestions');
             container.innerHTML = `
                 <div class="suggestion-header">Recent Searches</div>
-                ${watchHistory.slice(0, 5).map(item => `
+                ${searchHistory.slice(0, 5).map(item => `
                     <div class="suggestion-item" onclick="performGlobalSearch('${item}')">
                         <div class="suggestion-info">
                             <div class="suggestion-title">${item}</div>
@@ -3206,8 +3008,8 @@
             container.classList.add('active');
         }
 
-        function showSearchSuggestions(results) {
-            const container = document.getElementById('searchSuggestions');
+        function showTopSearchSuggestions(results) {
+            const container = document.getElementById('topSearchSuggestions');
             
             container.innerHTML = `
                 <div class="suggestion-header">Suggestions</div>
@@ -3218,7 +3020,7 @@
                     const inList = watchlist.some(i => i.id === item.id && i.type === item.media_type);
                     
                     return `
-                        <div class="suggestion-item" onclick="selectSearchResult(${item.id}, '${item.media_type}')">
+                        <div class="suggestion-item" onclick="selectTopSearchResult(${item.id}, '${item.media_type}')">
                             <div class="suggestion-thumb">
                                 <img src="${item.poster_path ? IMG_POSTER + item.poster_path : ''}" alt="${title}" onerror="this.style.display='none'">
                             </div>
@@ -3243,67 +3045,84 @@
             container.classList.add('active');
         }
 
-        function displaySearchResults(results) {
-            const grid = document.getElementById('searchResultsGrid');
-            const noResults = document.getElementById('noSearchResults');
-            
-            if (results.length === 0) {
-                grid.innerHTML = '';
-                noResults.style.display = 'block';
-                return;
-            }
-            
-            noResults.style.display = 'none';
-            grid.innerHTML = results.map(item => {
-                const type = item.media_type;
-                const displayItem = {...item, title: item.title || item.name};
-                return createMovieCard(displayItem, type);
-            }).join('');
-        }
-
-        function filterCurrentResults(query) {
-            if (!query) {
-                displaySearchResults(currentSearchResults);
-                return;
-            }
-            
-            const filtered = currentSearchResults.filter(item => {
-                const title = (item.title || item.name).toLowerCase();
-                return title.includes(query.toLowerCase());
-            });
-            
-            displaySearchResults(filtered);
-        }
-
-        function selectSearchResult(id, type) {
-            document.getElementById('searchSuggestions').classList.remove('active');
+        function selectTopSearchResult(id, type) {
+            document.getElementById('topSearchSuggestions').classList.remove('active');
             handleContentClick(id, type === 'movie' ? 'movie' : 'tv');
         }
 
-        // Sort and Filter
-        function toggleSortDropdown() {
-            document.getElementById('sortDropdown').classList.toggle('active');
+        // ==========================================
+        // GLOBAL SEARCH (Results Page)
+        // ==========================================
+
+        async function performGlobalSearch(query) {
+            if (!query) return;
+            
+            globalSearchState.query = query;
+            globalSearchState.currentPage = 1;
+            
+            // Save to history
+            if (!searchHistory.includes(query)) {
+                searchHistory.unshift(query);
+                if (searchHistory.length > 10) searchHistory.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+            
+            document.getElementById('searchQueryDisplay').textContent = query;
+            router('search');
+            
+            await loadGlobalSearchPage(1);
         }
 
-        function toggleMoviesSort() {
-            document.getElementById('moviesSortDropdown').classList.toggle('active');
+        async function loadGlobalSearchPage(page) {
+            document.getElementById('searchResultsGrid').innerHTML = '';
+            document.getElementById('noSearchResults').style.display = 'none';
+            document.getElementById('searchPagination').style.display = 'none';
+            
+            const results = await fetchTMDB('/search/multi', `&query=${encodeURIComponent(globalSearchState.query)}&page=${page}`);
+            
+            if (results?.results) {
+                globalSearchState.results = await filterValidItems(
+                    results.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv'), 
+                    'multi'
+                );
+                
+                globalSearchState.totalPages = results.total_pages || 1;
+                globalSearchState.currentPage = page;
+                
+                document.getElementById('searchResultsCount').textContent = results.total_results || globalSearchState.results.length;
+                
+                if (globalSearchState.results.length === 0) {
+                    document.getElementById('noSearchResults').style.display = 'block';
+                } else {
+                    document.getElementById('searchResultsGrid').innerHTML = globalSearchState.results.map(item => {
+                        const displayItem = {...item, title: item.title || item.name};
+                        return createMovieCard(displayItem, item.media_type);
+                    }).join('');
+                }
+                
+                document.getElementById('searchCurrentPage').textContent = page;
+                document.getElementById('searchTotalPages').textContent = globalSearchState.totalPages;
+                document.getElementById('searchPrevBtn').disabled = page === 1;
+                document.getElementById('searchNextBtn').disabled = page >= globalSearchState.totalPages;
+                document.getElementById('searchPagination').style.display = globalSearchState.totalPages > 1 ? 'flex' : 'none';
+            }
         }
 
-        function toggleTVSort() {
-            document.getElementById('tvSortDropdown').classList.toggle('active');
-        }
-
-        function closeAllSortDropdowns() {
-            document.querySelectorAll('.sort-dropdown').forEach(d => d.classList.remove('active'));
+        function changeSearchPage(direction) {
+            const newPage = globalSearchState.currentPage + direction;
+            if (newPage >= 1 && newPage <= globalSearchState.totalPages) {
+                loadGlobalSearchPage(newPage);
+                window.scrollTo(0, 0);
+            }
         }
 
         function sortResults(criteria, label) {
             document.getElementById('currentSort').textContent = `Sort by: ${label}`;
             document.querySelectorAll('#sortDropdown .sort-option').forEach(o => o.classList.remove('active'));
             event.target.classList.add('active');
-            closeAllSortDropdowns();
+            document.getElementById('sortDropdown').classList.remove('active');
             
-            let sorted = [...currentSearchResults];
+            let sorted = [...globalSearchState.results];
             
             switch(criteria) {
                 case 'rating':
@@ -3315,101 +3134,295 @@
                 case 'date_old':
                     sorted.sort((a, b) => new Date(a.release_date || a.first_air_date) - new Date(b.release_date || b.first_air_date));
                     break;
-                default:
-                    break;
             }
             
-            displaySearchResults(sorted);
+            document.getElementById('searchResultsGrid').innerHTML = sorted.map(item => {
+                const displayItem = {...item, title: item.title || item.name};
+                return createMovieCard(displayItem, item.media_type);
+            }).join('');
         }
 
-        function filterByGenre(genreId) {
-            currentGenreFilter = genreId;
-            
-            document.querySelectorAll('#searchGenreFilter .genre-chip').forEach(chip => {
-                chip.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            if (genreId === 'all') {
-                displaySearchResults(currentSearchResults);
+        function toggleSortDropdown() {
+            document.getElementById('sortDropdown').classList.toggle('active');
+        }
+
+        // ==========================================
+        // MOVIES PAGE SEARCH (Identical to top search)
+        // ==========================================
+
+        let moviesSearchTimeout = null;
+
+        function handleMoviesSearchInput(query) {
+            if (!query.trim()) {
+                document.getElementById('moviesSearchSuggestions').classList.remove('active');
                 return;
             }
-            
-            const filtered = currentSearchResults.filter(item => {
-                return item.genre_ids && item.genre_ids.includes(parseInt(genreId));
-            });
-            
-            displaySearchResults(filtered);
+
+            clearTimeout(moviesSearchTimeout);
+            moviesSearchTimeout = setTimeout(async () => {
+                // Search within loaded movies + fetch new ones
+                const results = await fetchTMDB('/search/movie', `&query=${encodeURIComponent(query)}&page=1`);
+                if (results?.results) {
+                    const filtered = await filterValidItems(results.results, 'movie');
+                    showMoviesSearchSuggestions(filtered.slice(0, 5));
+                }
+            }, 300);
         }
 
-        // Library Pagination System (Replaces Infinite Scroll)
-        async function loadLibraryPage(type, page) {
+        function showMoviesSearchHistory() {
+            if (searchHistory.length === 0) return;
+            
+            const container = document.getElementById('moviesSearchSuggestions');
+            container.innerHTML = `
+                <div class="suggestion-header">Recent Searches</div>
+                ${searchHistory.slice(0, 5).map(item => `
+                    <div class="suggestion-item" onclick="performMoviesSearch('${item}')">
+                        <div class="suggestion-info">
+                            <div class="suggestion-title">${item}</div>
+                        </div>
+                        <span class="suggestion-type" style="background: var(--bg-tertiary);">History</span>
+                    </div>
+                `).join('')}`;
+            container.classList.add('active');
+        }
+
+        function showMoviesSearchSuggestions(results) {
+            const container = document.getElementById('moviesSearchSuggestions');
+            
+            container.innerHTML = `
+                <div class="suggestion-header">Suggestions</div>
+                ${results.map(item => {
+                    const inList = watchlist.some(i => i.id === item.id && i.type === 'movie');
+                    return `
+                        <div class="suggestion-item" onclick="selectMoviesSearchResult(${item.id})">
+                            <div class="suggestion-thumb">
+                                <img src="${item.poster_path ? IMG_POSTER + item.poster_path : ''}" alt="${item.title}" onerror="this.style.display='none'">
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">${item.title}</div>
+                                <div class="suggestion-meta">
+                                    <span class="suggestion-rating">
+                                        <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                        ${item.vote_average?.toFixed(1) || '--'}
+                                    </span>
+                                    <span>${item.release_date?.split('-')[0] || '----'}</span>
+                                </div>
+                            </div>
+                            <span class="suggestion-type">Movie</span>
+                            <button class="suggestion-wishlist ${inList ? 'in-list' : ''}" onclick="event.stopPropagation(); toggleListFromCard(${item.id}, 'movie', event)" title="${inList ? 'In Watchlist' : 'Add to Watchlist'}">
+                                ${inList ? '✓' : '+'}
+                            </button>
+                        </div>
+                    `;
+                }).join('')}`;
+
+            container.classList.add('active');
+        }
+
+        function selectMoviesSearchResult(id) {
+            document.getElementById('moviesSearchSuggestions').classList.remove('active');
+            handleContentClick(id, 'movie');
+        }
+
+        async function performMoviesSearch(query) {
+            if (!query) query = document.getElementById('moviesSearchInput').value.trim();
+            if (!query) return;
+            
+            const state = libraryState.movie;
+            state.searchQuery = query;
+            state.currentPage = 1;
+            
+            if (!searchHistory.includes(query)) {
+                searchHistory.unshift(query);
+                if (searchHistory.length > 10) searchHistory.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+            
+            document.getElementById('moviesSearchSuggestions').classList.remove('active');
+            document.getElementById('moviesLoader').style.display = 'flex';
+            document.getElementById('allMoviesGrid').innerHTML = '';
+            
+            // Search TMDB for movies
+            const results = await fetchTMDB('/search/movie', `&query=${encodeURIComponent(query)}&page=1`);
+            
+            if (results?.results) {
+                state.searchResults = await filterValidItems(results.results, 'movie');
+                state.totalPages = results.total_pages || 1;
+                state.displayedItems = state.searchResults;
+                
+                displayLibraryGrid('movie');
+                updateLibraryPagination('movie');
+            }
+            
+            document.getElementById('moviesLoader').style.display = 'none';
+        }
+
+        // ==========================================
+        // TV PAGE SEARCH (Identical to movies search)
+        // ==========================================
+
+        let tvSearchTimeout = null;
+
+        function handleTVSearchInput(query) {
+            if (!query.trim()) {
+                document.getElementById('tvSearchSuggestions').classList.remove('active');
+                return;
+            }
+
+            clearTimeout(tvSearchTimeout);
+            tvSearchTimeout = setTimeout(async () => {
+                const results = await fetchTMDB('/search/tv', `&query=${encodeURIComponent(query)}&page=1`);
+                if (results?.results) {
+                    const filtered = await filterValidItems(results.results, 'tv');
+                    showTVSearchSuggestions(filtered.slice(0, 5));
+                }
+            }, 300);
+        }
+
+        function showTVSearchHistory() {
+            if (searchHistory.length === 0) return;
+            
+            const container = document.getElementById('tvSearchSuggestions');
+            container.innerHTML = `
+                <div class="suggestion-header">Recent Searches</div>
+                ${searchHistory.slice(0, 5).map(item => `
+                    <div class="suggestion-item" onclick="performTVSearch('${item}')">
+                        <div class="suggestion-info">
+                            <div class="suggestion-title">${item}</div>
+                        </div>
+                        <span class="suggestion-type" style="background: var(--bg-tertiary);">History</span>
+                    </div>
+                `).join('')}`;
+            container.classList.add('active');
+        }
+
+        function showTVSearchSuggestions(results) {
+            const container = document.getElementById('tvSearchSuggestions');
+            
+            container.innerHTML = `
+                <div class="suggestion-header">Suggestions</div>
+                ${results.map(item => {
+                    const inList = watchlist.some(i => i.id === item.id && i.type === 'tv');
+                    return `
+                        <div class="suggestion-item" onclick="selectTVSearchResult(${item.id})">
+                            <div class="suggestion-thumb">
+                                <img src="${item.poster_path ? IMG_POSTER + item.poster_path : ''}" alt="${item.name}" onerror="this.style.display='none'">
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">${item.name}</div>
+                                <div class="suggestion-meta">
+                                    <span class="suggestion-rating">
+                                        <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                        ${item.vote_average?.toFixed(1) || '--'}
+                                    </span>
+                                    <span>${item.first_air_date?.split('-')[0] || '----'}</span>
+                                </div>
+                            </div>
+                            <span class="suggestion-type">TV</span>
+                            <button class="suggestion-wishlist ${inList ? 'in-list' : ''}" onclick="event.stopPropagation(); toggleListFromCard(${item.id}, 'tv', event)" title="${inList ? 'In Watchlist' : 'Add to Watchlist'}">
+                                ${inList ? '✓' : '+'}
+                            </button>
+                        </div>
+                    `;
+                }).join('')}`;
+
+            container.classList.add('active');
+        }
+
+        function selectTVSearchResult(id) {
+            document.getElementById('tvSearchSuggestions').classList.remove('active');
+            handleContentClick(id, 'tv');
+        }
+
+        async function performTVSearch(query) {
+            if (!query) query = document.getElementById('tvSearchInput').value.trim();
+            if (!query) return;
+            
+            const state = libraryState.tv;
+            state.searchQuery = query;
+            state.currentPage = 1;
+            
+            if (!searchHistory.includes(query)) {
+                searchHistory.unshift(query);
+                if (searchHistory.length > 10) searchHistory.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+            
+            document.getElementById('tvSearchSuggestions').classList.remove('active');
+            document.getElementById('tvLoader').style.display = 'flex';
+            document.getElementById('allTVGrid').innerHTML = '';
+            
+            const results = await fetchTMDB('/search/tv', `&query=${encodeURIComponent(query)}&page=1`);
+            
+            if (results?.results) {
+                state.searchResults = await filterValidItems(results.results, 'tv');
+                state.totalPages = results.total_pages || 1;
+                state.displayedItems = state.searchResults;
+                
+                displayLibraryGrid('tv');
+                updateLibraryPagination('tv');
+            }
+            
+            document.getElementById('tvLoader').style.display = 'none';
+        }
+
+        // ==========================================
+        // IDENTICAL LIBRARY PAGINATION FOR MOVIES & TV
+        // ==========================================
+
+        async function loadLibrary(type, page = 1) {
             const state = libraryState[type];
             if (state.isLoading) return;
             
             state.isLoading = true;
+            state.currentPage = page;
+            
             const loaderId = type === 'movie' ? 'moviesLoader' : 'tvLoader';
-            const gridId = type === 'movie' ? 'allMoviesGrid' : 'allTVGrid';
-            
             document.getElementById(loaderId).style.display = 'flex';
-            
-            // Calculate which API pages to load
-            const itemsPerApiPage = 20;
-            const startApiPage = Math.floor(((page - 1) * state.itemsPerPage) / itemsPerApiPage) + 1;
-            const endApiPage = Math.floor((page * state.itemsPerPage - 1) / itemsPerApiPage) + 1;
             
             let sortParam = '';
             switch(state.currentSort) {
                 case 'rating': sortParam = '&sort_by=vote_average.desc&vote_count.gte=1000'; break;
                 case 'popular': sortParam = '&sort_by=popularity.desc'; break;
                 case 'latest': sortParam = type === 'movie' ? '&sort_by=release_date.desc' : '&sort_by=first_air_date.desc'; break;
-                default: sortParam = '&sort_by=vote_average.desc&vote_count.gte=1000';
             }
             
-            // Load necessary pages from API
-            const newItems = [];
-            for (let apiPage = startApiPage; apiPage <= endApiPage; apiPage++) {
-                // Check if we already have this page cached
-                const cached = state.items.slice((apiPage - 1) * itemsPerApiPage, apiPage * itemsPerApiPage);
-                if (cached.length === itemsPerApiPage) {
-                    newItems.push(...cached);
-                    continue;
+            const endpoint = type === 'movie' ? '/discover/movie' : '/discover/tv';
+            const result = await fetchTMDB(endpoint, `&page=${page}${sortParam}`);
+            
+            if (result?.results) {
+                const valid = await filterValidItems(result.results, type);
+                
+                // Replace items for page 1, append for subsequent pages
+                if (page === 1) {
+                    state.items = valid;
+                } else {
+                    state.items = [...state.items, ...valid];
                 }
                 
-                const endpoint = type === 'movie' ? '/discover/movie' : '/discover/tv';
-                const result = await fetchTMDB(endpoint, `&page=${apiPage}${sortParam}`);
+                state.displayedItems = state.items;
+                state.totalPages = result.total_pages || 1;
                 
-                if (result?.results) {
-                    const valid = await filterValidItems(result.results, type);
-                    newItems.push(...valid);
-                    
-                    // Cache items
-                    const startIdx = (apiPage - 1) * itemsPerApiPage;
-                    valid.forEach((item, idx) => {
-                        state.items[startIdx + idx] = item;
-                    });
-                }
+                displayLibraryGrid(type);
+                updateLibraryPagination(type);
             }
-            
-            // Update filtered items
-            state.filteredItems = [...state.items].filter(item => item); // Remove undefined
-            
-            // Display current page
-            displayLibraryPage(type);
             
             state.isLoading = false;
             document.getElementById(loaderId).style.display = 'none';
-            updatePaginationControls(type);
         }
 
-        function displayLibraryPage(type) {
+        function displayLibraryGrid(type) {
             const state = libraryState[type];
             const gridId = type === 'movie' ? 'allMoviesGrid' : 'allTVGrid';
             const grid = document.getElementById(gridId);
             
+            // If searching, show search results, otherwise show browsed items
+            const itemsToShow = state.searchQuery ? state.searchResults : state.displayedItems;
+            
+            // Simple pagination: show 20 items per page from loaded items
             const start = (state.currentPage - 1) * state.itemsPerPage;
             const end = start + state.itemsPerPage;
-            const pageItems = state.filteredItems.slice(start, end);
+            const pageItems = itemsToShow.slice(start, end);
             
             grid.innerHTML = pageItems.map(item => {
                 const displayItem = type === 'movie' ? item : {...item, title: item.name};
@@ -3417,91 +3430,102 @@
             }).join('');
         }
 
-        function updatePaginationControls(type) {
+        function updateLibraryPagination(type) {
             const state = libraryState[type];
             const currentPageEl = document.getElementById(`${type}CurrentPage`);
             const prevBtn = document.getElementById(`${type}PrevBtn`);
             const nextBtn = document.getElementById(`${type}NextBtn`);
             
-            currentPageEl.textContent = state.currentPage;
-            prevBtn.disabled = state.currentPage === 1;
-            nextBtn.disabled = state.filteredItems.length < state.currentPage * state.itemsPerPage;
+            const itemsToShow = state.searchQuery ? state.searchResults : state.displayedItems;
+            const totalPages = Math.ceil(itemsToShow.length / state.itemsPerPage) || 1;
+            
+            if (currentPageEl) currentPageEl.textContent = state.currentPage;
+            if (prevBtn) prevBtn.disabled = state.currentPage === 1;
+            
+            // Enable next if we have more items loaded or if API has more pages
+            const hasMoreItems = itemsToShow.length > state.currentPage * state.itemsPerPage;
+            const apiHasMore = state.currentPage < state.totalPages && !state.searchQuery;
+            if (nextBtn) nextBtn.disabled = !hasMoreItems && !apiHasMore;
         }
 
-        function changeLibraryPage(type, direction) {
+        function changePage(type, direction) {
             const state = libraryState[type];
             const newPage = state.currentPage + direction;
             
             if (newPage < 1) return;
             
-            state.currentPage = newPage;
-            loadLibraryPage(type, newPage);
-            window.scrollTo(0, 0);
-        }
-
-        function filterLibrary(type, query) {
-            const state = libraryState[type];
-            const gridId = type === 'movie' ? 'allMoviesGrid' : 'allTVGrid';
+            const itemsToShow = state.searchQuery ? state.searchResults : state.displayedItems;
+            const hasEnoughItems = itemsToShow.length >= newPage * state.itemsPerPage;
             
-            if (!query) {
-                state.filteredItems = [...state.items].filter(item => item);
-                state.currentPage = 1;
-                displayLibraryPage(type);
-                updatePaginationControls(type);
-                return;
+            if (hasEnoughItems) {
+                // We have the items cached, just display them
+                state.currentPage = newPage;
+                displayLibraryGrid(type);
+                updateLibraryPagination(type);
+            } else if (!state.searchQuery && newPage <= state.totalPages) {
+                // Need to load more from API
+                loadLibrary(type, newPage);
             }
             
-            state.filteredItems = state.items.filter(item => {
-                if (!item) return false;
-                const title = (item.title || item.name || '').toLowerCase();
-                return title.includes(query.toLowerCase());
-            });
-            
-            state.currentPage = 1;
-            displayLibraryPage(type);
-            updatePaginationControls(type);
+            window.scrollTo(0, 0);
         }
 
         async function sortLibrary(type, criteria) {
             const state = libraryState[type];
             state.currentSort = criteria;
             state.currentPage = 1;
-            state.items = []; // Clear cache to reload with new sort
-            state.filteredItems = [];
+            state.searchQuery = ''; // Clear search when sorting
+            state.items = [];
             
-            const labels = {
-                popular: 'Popularity',
-                rating: 'IMDb Rating',
-                latest: 'Latest'
-            };
-            
+            // Update UI
+            const labels = { popular: 'Popularity', rating: 'IMDb Rating', latest: 'Latest' };
             document.getElementById(`${type}CurrentSort`).textContent = `Sort by: ${labels[criteria]}`;
-            event.target.parentElement.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
-            event.target.classList.add('active');
-            closeAllSortDropdowns();
             
-            await loadLibraryPage(type, 1);
+            // Update active state in dropdown
+            const dropdown = document.getElementById(`${type}SortDropdown`);
+            dropdown.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+            event.target.classList.add('active');
+            dropdown.classList.remove('active');
+            
+            // Clear search input
+            document.getElementById(`${type}SearchInput`).value = '';
+            
+            await loadLibrary(type, 1);
         }
 
-        // Handle content click
+        function toggleMoviesSort() {
+            document.getElementById('moviesSortDropdown').classList.toggle('active');
+        }
+
+        function toggleTVSort() {
+            document.getElementById('tvSortDropdown').classList.toggle('active');
+        }
+
+        // ==========================================
+        // CONTENT HANDLING (Movies & TV)
+        // ==========================================
+
         async function handleContentClick(id, type) {
             currentVideoType = type;
             currentVideoId = id;
 
-            // Add to watch history
+            // Find item
             let item = null;
             if (type === 'movie') {
                 item = cache.movies.find(m => m.id === id) || 
                        cache.topRatedMovies.find(m => m.id === id) ||
-                       libraryState.movie.items.find(m => m.id === id);
+                       libraryState.movie.items.find(m => m.id === id) ||
+                       libraryState.movie.searchResults.find(m => m.id === id);
             } else {
                 item = cache.tv.find(t => t.id === id) || 
                        cache.topRatedTV.find(t => t.id === id) ||
-                       libraryState.tv.items.find(t => t.id === id);
+                       libraryState.tv.items.find(t => t.id === id) ||
+                       libraryState.tv.searchResults.find(t => t.id === id);
             }
             
+            // Add to history
             if (item) {
-                const historyItem = {
+                watchHistory.push({
                     id: item.id,
                     title: item.title || item.name,
                     poster_path: item.poster_path,
@@ -3509,8 +3533,7 @@
                     year: type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0],
                     type: type,
                     timestamp: Date.now()
-                };
-                watchHistory.push(historyItem);
+                });
                 if (watchHistory.length > 50) watchHistory = watchHistory.slice(-50);
                 localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
                 updateWatchItAgain();
@@ -3520,16 +3543,15 @@
                 currentTVId = id;
                 let show = cache.tv.find(t => t.id === id) || 
                           cache.topRatedTV.find(t => t.id === id) ||
-                          libraryState.tv.items.find(t => t.id === id);
+                          libraryState.tv.items.find(t => t.id === id) ||
+                          libraryState.tv.searchResults.find(t => t.id === id);
                 
                 if (!show) {
                     show = await fetchTMDB(`/tv/${id}`);
-                    if (show && show.vote_average > 0 && show.poster_path) {
-                        cache.tv.push(show);
-                    }
+                    if (show) cache.tv.push(show);
                 }
                 
-                if (show && show.vote_average > 0 && show.poster_path) {
+                if (show) {
                     const progress = getWatchingProgress(id);
                     if (progress) {
                         showGuiModal({
@@ -3540,9 +3562,7 @@
                                 { text: 'Resume', primary: true, onClick: () => {
                                     playEpisode(progress.season, progress.episode, progress.episodeName, false);
                                 }},
-                                { text: 'Start Over', primary: false, onClick: () => {
-                                    openEpisodeSelector(show);
-                                }}
+                                { text: 'Start Over', primary: false, onClick: () => openEpisodeSelector(show) }
                             ]
                         });
                         return;
@@ -3555,8 +3575,7 @@
         }
 
         function getWatchingProgress(id) {
-            const entry = continueWatching.find(c => c.id === id && c.type === 'tv');
-            return entry || null;
+            return continueWatching.find(c => c.id === id && c.type === 'tv') || null;
         }
 
         async function openEpisodeSelector(show) {
@@ -3646,10 +3665,7 @@
                     continueWatching.push(newEntry);
                 }
                 
-                if (continueWatching.length > 10) {
-                    continueWatching = continueWatching.slice(-10);
-                }
-                
+                if (continueWatching.length > 10) continueWatching = continueWatching.slice(-10);
                 localStorage.setItem('continueWatching', JSON.stringify(continueWatching));
                 updateContinueWatching();
 
@@ -3691,15 +3707,9 @@
             const btn = document.getElementById('videoWatchlistBtn');
             const inList = watchlist.some(i => i.id === currentVideoId && i.type === currentVideoType);
             
-            if (inList) {
-                btn.classList.remove('not-in-list');
-                btn.classList.add('watchlist-btn');
-                btn.title = 'In Watchlist (Click to Remove)';
-            } else {
-                btn.classList.add('not-in-list');
-                btn.classList.remove('watchlist-btn');
-                btn.title = 'Add to Watchlist';
-            }
+            btn.classList.toggle('not-in-list', !inList);
+            btn.classList.toggle('watchlist-btn', inList);
+            btn.title = inList ? 'In Watchlist (Click to Remove)' : 'Add to Watchlist';
         }
 
         function toggleVideoWatchlist() {
@@ -3711,15 +3721,14 @@
             } else {
                 fetchItemDetails(currentVideoId, currentVideoType).then(details => {
                     if (details) {
-                        const item = {
+                        watchlist.push({
                             id: details.id,
                             title: details.title || details.name,
                             poster_path: details.poster_path,
                             rating: details.vote_average?.toFixed(1),
                             year: currentVideoType === 'movie' ? details.release_date?.split('-')[0] : details.first_air_date?.split('-')[0],
                             type: currentVideoType
-                        };
-                        watchlist.push(item);
+                        });
                         localStorage.setItem('watchlist', JSON.stringify(watchlist));
                         showToast('Added to Watchlist', 'success');
                         updateVideoWatchlistButton();
@@ -3768,7 +3777,7 @@
                         loadWatchlist();
                         showToast('Watchlist cleared', 'success');
                     }},
-                    { text: 'Cancel', primary: false, onClick: () => {} }
+                    { text: 'Cancel', primary: false }
                 ]
             });
         }
@@ -3824,10 +3833,12 @@
             handleContentClick(id, type);
         }
 
+        // ==========================================
+        // ROUTING
+        // ==========================================
+
         function router(route, updateHash = true) {
-            if (updateHash) {
-                window.location.hash = route;
-            }
+            if (updateHash) window.location.hash = route;
             showPage(route);
         }
 
@@ -3849,37 +3860,32 @@
             if (navLink) navLink.classList.add('active');
 
             const logo = document.getElementById('navLogo');
-            if (route === 'home') {
-                logo.classList.remove('hidden');
-            } else {
-                logo.classList.add('hidden');
-            }
+            logo.classList.toggle('hidden', route !== 'home');
 
             window.scrollTo(0, 0);
 
             if (route === 'mylist') loadWatchlist();
             
             if (route === 'movies') {
-                const grid = document.getElementById('allMoviesGrid');
-                if (libraryState.movie.items.length === 0) {
-                    await loadLibraryPage('movie', 1);
+                if (libraryState.movie.items.length === 0 && !libraryState.movie.searchQuery) {
+                    await loadLibrary('movie', 1);
                 } else {
-                    displayLibraryPage('movie');
-                    updatePaginationControls('movie');
+                    displayLibraryGrid('movie');
+                    updateLibraryPagination('movie');
                 }
             }
             
             if (route === 'tv') {
-                const grid = document.getElementById('allTVGrid');
-                if (libraryState.tv.items.length === 0) {
-                    await loadLibraryPage('tv', 1);
+                if (libraryState.tv.items.length === 0 && !libraryState.tv.searchQuery) {
+                    await loadLibrary('tv', 1);
                 } else {
-                    displayLibraryPage('tv');
-                    updatePaginationControls('tv');
+                    displayLibraryGrid('tv');
+                    updateLibraryPagination('tv');
                 }
             }
         }
 
+        // Event listeners
         document.getElementById('videoModal').addEventListener('click', (e) => {
             if (e.target.id === 'videoModal') closeVideo();
         });
